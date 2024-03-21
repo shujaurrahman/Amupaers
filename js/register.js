@@ -29,7 +29,7 @@ submitBtn.onclick = () => {
           // Hide the error message after 2  seconds
           setTimeout(() => {
             errorText.style.display = "none";
-          }, 2000);
+          }, 5000);
         }
       }
     }

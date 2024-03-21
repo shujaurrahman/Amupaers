@@ -94,20 +94,101 @@ public function verifyUser($enteredCode, $email) {
         return "User not found or verification code not retrieved.";
     }
 }
+    // Generate verification code
+    public function generateVerificationCode() {
+        return mt_rand(100000, 999999); // Generate a 6-digit random number
+    }
 
-    // Log in user
-    public function loginUser() {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE username = :username';
+    // Send verification email
+    public function sendVerificationEmail($email, $verificationCode) {
+        $subject = 'Email Verification Code';
+        $msg = 'Thank you for registering. Your verification code is:';
+        $msgend = 'Please use this code to verify your email address.';
+
+        // Send email using the PHPMailer instance created in mail.php
+        try {
+            require "../auth/mail.php";
+            $m->addAddress($email, $this->getFirstName($email)); // Add recipient
+            $m->Subject = $subject;
+            $m->Body = $msg . ' <b>' . $verificationCode . '</b><br><br>' . $msgend; // Set email body
+            $m->send(); // Send the email
+        } catch (Exception $e) {
+            echo "Failed to send verification email. Error: " . $e->getMessage();
+        }
+    }
+
+    // Update verification code in the database
+    public function updateVerificationCode($email, $verificationCode) {
+        $query = 'UPDATE ' . $this->table . ' SET code = :code WHERE email = :email';
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':code', $verificationCode);
+        $stmt->bindParam(':email', $email);
+        if ($stmt->execute()) {
+            return true;
+        }
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+    }
 
-        $stmt->bindParam(':username', $this->username);
+    // Get first name from the database using email
+    private function getFirstName($email) {
+        $query = 'SELECT username FROM ' . $this->table . ' WHERE email = :email';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($row && password_verify($this->password, $row['password'])) {
-            return $row;
+        if ($row) {
+            $username = $row['username'];
+            $parts = explode(' ', $username);
+            return $parts[0]; // Return the first part of the username as the first name
         }
-        return null;
+        return ''; // Return empty string if no user found
+    }
+    // Log in user
+// Log in user
+public function loginUser() {
+    $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
+    $stmt = $this->conn->prepare($query);
+
+    $stmt->bindParam(':email', $this->username); // Use email as the parameter
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row && password_verify($this->password, $row['password'])) {
+        if ($row['code'] == 0) {
+            return $row; // User is verified and login is successful
+        } else {
+            return 'unverified'; // User exists but is not verified
+        }
+    }
+    return null; // Login failed, return null
+}
+
+
+
+    
+       // Check if email already exists
+       public function checkEmailExistence($email) {
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        return $stmt->rowCount() > 0; // Returns true if email exists, false otherwise
+    }
+
+    // Login user with email existence check
+    public function loginWithEmailExistence($email) {
+        // Check if email exists
+        if ($this->checkEmailExistence($email)) {
+            // Proceed with login
+            $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC); // Returns user data if email exists
+        } else {
+            return null; // Return null if email doesn't exist
+        }
     }
 
     // Read all users
@@ -127,13 +208,15 @@ public function verifyUser($enteredCode, $email) {
         return $stmt;
     }
 
-    public function readUserByEmail($email) {
+    public function getUserDetailsByEmail($email) {
         $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
-        return $stmt;
+        $userDetails = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch user details
+        return $userDetails; // Return user details as an associative array
     }
+    
     
     // Update user
     public function updateUser() {

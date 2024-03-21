@@ -14,9 +14,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $result = $user->verifyUser($otp, $userEmail);
 
-    if ($result=="success") {
+    if ($result === "success") {
+        // Get the user's details from the database
+        $userDetails = $user->getUserDetailsByEmail($userEmail);
+
+        // Set the username and email in the session
+        $_SESSION['email'] = $userDetails['email'];
+        $_SESSION['username'] = $userDetails['username'];
+
+        // Echo "success" to indicate successful verification
         echo 'success';
     } else {
+        // Echo the result (error message) returned by the verification method
         echo $result;
     }
 } else {

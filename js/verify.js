@@ -3,7 +3,7 @@ const submitBtn = form.querySelector(".submitButton");
 const errorText = form.querySelector(".error-text");
 
 form.addEventListener("submit", (e) => {
-  e.preventDefault(); // Prevent default form submission
+  e.preventDefault(); 
   const formData = new FormData(form);
   
   // Send AJAX request

@@ -32,8 +32,8 @@
               Sed eu volutpat arcu, a tincidunt nulla quam, feugiat sit amet ipsum a, dapibus porta velit.
             </p>
 
-            <a href="#" class="btn btn-primary">
-              <span class="span">Get Started Today</span>
+            <a href="http://localhost/amupapers/pages/register.php" class="btn btn-primary">
+              <span class="span">Register Now</span>
 
               <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
             </a>
@@ -271,7 +271,7 @@
 
 
   <!-- - custom js link-->
-  <script src="./js/script.js" defer></script>
+  <!-- <script src="./js/script.js" defer></script> -->
 </body>
 
 </html>

@@ -1,7 +1,4 @@
 'use strict';
-
-
-
 /**
  * element toggle function
  */
@@ -74,3 +71,16 @@ for (let i = 0; i < whishlistBtns.length; i++) {
     toggleElem(this);
   });
 }
+
+// JavaScript code to hide the .msg-text element after 5 seconds
+window.addEventListener('DOMContentLoaded', () => {
+  const msgText = document.querySelector('.msg-text');
+  if (msgText.textContent.trim() !== '') {
+      msgText.style.display = 'block'; // Display the element if it has content
+
+      // Set a timer to hide the message after 5 seconds
+      setTimeout(() => {
+          msgText.style.display = 'none';
+      }, 5000); // 5000 milliseconds = 5 seconds
+  }
+});

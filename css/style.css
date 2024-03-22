@@ -766,3 +766,14 @@ body {
   .footer-top { padding-block: 120px 80px; }
 
 }
+.msg-text{
+  color: #fff;
+  /* color: var(--ultramarine-blue); */
+  padding: 10px 10px;
+  text-align: center;
+  border-radius: 10px;
+  background: var(--ultramarine-blue);
+  border: 1px solid #f5c6cb;
+  margin-bottom: 20px;
+  display: none;
+}

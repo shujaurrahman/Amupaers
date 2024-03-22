@@ -51,12 +51,12 @@
           echo '<a href="http://localhost/amupapers/pages/dashboard.php" class="header-action-btn login-btn">Dashboard</a>';
         }
         // Display logout button
-        echo '<a href="../backend/logout.php" class="header-action-btn logout-btn">Logout</a>';
+        echo '<a href="http://localhost/amupapers/backend/logout.php" class="header-action-btn logout-btn">Logout</a>';
       } else {
         // If user is not logged in, display login/register button
-        echo '<a href="http://localhost/amupapers/pages/register.php" class="header-action-btn login-btn">
+        echo '<a href="http://localhost/amupapers/pages/login.php" class="header-action-btn login-btn">
             <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
-            <span class="span">Login / Register</span>
+            <span class="span">Login</span>
           </a>';
       }
       ?>
@@ -70,4 +70,5 @@
     <div class="overlay" data-nav-toggler data-overlay></div>
 
   </div>
+  <script src="http://localhost/amupapers/js/script.js" defer></script>
 </header>

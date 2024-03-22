@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Reset Password</title>
     <?php require_once "../assets/fonts.php"?>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/form.css">
@@ -17,7 +17,7 @@
     <div id="login">
         <div id="formLogin">
 
-            <h1>Sign In →
+            <h1>Registered Email →
             </h1>
 
           <form action="#" method="POST" enctype="multipart/form-data" autocomplete="off">
@@ -27,13 +27,8 @@
                       <label class="labelLogin">Email</label>
                   </div>
 
-                  <div class="inputContainer">
-                      <input type="password" class="inputLogin" placeholder=" " name="password">
-                      <label class="labelLogin">Password</label>
-                  </div>
-
                   <div class="field button">
-                  <input type="submit" class="submitButton" value="Sign In">
+                  <input type="submit" class="submitButton" value="Reset">
                   </div>
           </form>
 
@@ -41,13 +36,12 @@
             <span class="breaker">
                 or 
             </span>    
-                <a class="links" href="./register.php">Register</a>
             </div>
             <div class="register">
             <span class="breaker">
-              <b>Fotgot password?</b>
+              <b>Login instead?</b>
             </span>  
-            <a class="links" href="../pages/reset-pass.php">Reset Now</a>
+            <a class="links" href="../pages/login.php">Login Now</a>
             </div>
 
         </div>
@@ -55,7 +49,5 @@
   </section>
   </div>
   </body>
-  <script src="../js/login.js"></script>
-  <script src="../js/script.js" defer></script>
-
+  <script src="../js/reset-pass.js"></script>
 </html>

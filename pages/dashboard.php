@@ -6,6 +6,29 @@ if (!isset($_SESSION['username'])) {
     header("Location: http://localhost/amupapers/pages/login.php");
     exit();
 }
+
+$name=$_SESSION['username'];
+// Check if a password change message is set in the session
+if (isset($_SESSION['msg'])) {
+    $msg = "Your password was changed";
+    // Clear the session message to avoid displaying it again
+    unset($_SESSION['msg']);
+} 
+elseif(isset($_SESSION['unverified'])){
+   $msg="Account Verification Successfull.  Welcome,$name";
+   unset($_SESSION['unverified']);
+}
+elseif(isset($_SESSION['wlcm-msg'])){
+   $msg="Welcome,$name";
+   unset($_SESSION['wlcm-msg']);
+}
+elseif(isset($_SESSION['wlcm-bck'])){
+   $msg="Welcome Back,$name";
+   unset($_SESSION['wlcm-bck']);
+}
+else {
+   $msg = ""; // Set empty message if not set
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +47,9 @@ if (!isset($_SESSION['username'])) {
   <!-- <h2>Hello, Shuja ur Rahman </h2> -->
         <section class="section category" aria-label="category">
         <div class="container">
-
+        <div class="msg-text" style="display: <?php echo ($msg != '') ? 'block' : 'none'; ?>">
+        <?php echo $msg; ?>
+    </div>
           <p class="section-subtitle">Trending</p>
 
           <h2 class="h2 section-title">Popular Papers To Solve </h2>

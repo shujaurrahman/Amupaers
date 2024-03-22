@@ -29,6 +29,7 @@ submitBtn.onclick = () => {
           submitBtn.value = "Login";
           // Hide the error message after 2 seconds
           setTimeout(() => {
+            
             errorText.style.display = "none";
           }, 5000);
         }

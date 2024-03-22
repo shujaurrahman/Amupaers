@@ -1,6 +1,7 @@
 <?php
 
-class User {
+class User
+{
     private $conn;
     private $table = 'users';
 
@@ -13,11 +14,13 @@ class User {
     public $is_super_admin;
     public $code;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function validateUserData($fname, $lname, $email, $password) {
+    public function validateUserData($fname, $lname, $email, $password)
+    {
         $errors = array();
 
         if (strlen($fname) < 4) {
@@ -40,14 +43,15 @@ class User {
 
         return $errors;
     }
-    public function registerUser() {
+    public function registerUser()
+    {
         // Generate verification code (6-digit number)
         $verificationCode = mt_rand(100000, 999999);
-    
+
         $query = 'INSERT INTO ' . $this->table . ' 
                   SET username = :username, password = :password, email = :email, role = :role, registration_date = :registration_date, is_super_admin = :is_super_admin, code = :code';
         $stmt = $this->conn->prepare($query);
-    
+
         $stmt->bindParam(':username', $this->username);
         $stmt->bindParam(':password', $this->password);
         $stmt->bindParam(':email', $this->email);
@@ -55,7 +59,7 @@ class User {
         $stmt->bindParam(':registration_date', $this->registration_date);
         $stmt->bindParam(':is_super_admin', $this->is_super_admin);
         $stmt->bindParam(':code', $verificationCode); // Bind the verification code as an integer
-    
+
         if ($stmt->execute()) {
             return $verificationCode; // Return verification code
         }
@@ -63,44 +67,47 @@ class User {
         return false;
     }
 
-        // Verify user using verification code
-public function verifyUser($enteredCode, $email) {
-    // Fetch the verification code from the database
-    $query = 'SELECT code FROM ' . $this->table . ' WHERE email = :email';
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Verify user using verification code
+    public function verifyUser($enteredCode, $email)
+    {
+        // Fetch the verification code from the database
+        $query = 'SELECT code FROM ' . $this->table . ' WHERE email = :email';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($row) {
-        $verificationCode = $row['code'];
+        if ($row) {
+            $verificationCode = $row['code'];
 
-        // Check if the entered code matches the verification code
-        if ($enteredCode == $verificationCode) {
-            // Set the user as verified by updating the code to 0
-            $query = 'UPDATE ' . $this->table . ' SET code = 0 WHERE email = :email';
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':email', $email);
+            // Check if the entered code matches the verification code
+            if ($enteredCode == $verificationCode) {
+                // Set the user as verified by updating the code to 0
+                $query = 'UPDATE ' . $this->table . ' SET code = 0 WHERE email = :email';
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(':email', $email);
 
-            if ($stmt->execute()) {
-                return "success";
+                if ($stmt->execute()) {
+                    return "success";
+                } else {
+                    return "didnot exe";
+                }
             } else {
-                return "didnot exe";
+                return "Incorrect verification code.";
             }
         } else {
-            return "Incorrect verification code.";
+            return "User not found or verification code not retrieved.";
         }
-    } else {
-        return "User not found or verification code not retrieved.";
     }
-}
     // Generate verification code
-    public function generateVerificationCode() {
+    public function generateVerificationCode()
+    {
         return mt_rand(100000, 999999); // Generate a 6-digit random number
     }
 
     // Send verification email
-    public function sendVerificationEmail($email, $verificationCode) {
+    public function sendVerificationEmail($email, $verificationCode)
+    {
         $subject = 'Email Verification Code';
         $msg = 'Thank you for registering. Your verification code is:';
         $msgend = 'Please use this code to verify your email address.';
@@ -118,7 +125,8 @@ public function verifyUser($enteredCode, $email) {
     }
 
     // Update verification code in the database
-    public function updateVerificationCode($email, $verificationCode) {
+    public function updateVerificationCode($email, $verificationCode)
+    {
         $query = 'UPDATE ' . $this->table . ' SET code = :code WHERE email = :email';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':code', $verificationCode);
@@ -131,7 +139,8 @@ public function verifyUser($enteredCode, $email) {
     }
 
     // Get first name from the database using email
-    private function getFirstName($email) {
+    private function getFirstName($email)
+    {
         $query = 'SELECT username FROM ' . $this->table . ' WHERE email = :email';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $email);
@@ -145,30 +154,31 @@ public function verifyUser($enteredCode, $email) {
         return ''; // Return empty string if no user found
     }
     // Log in user
-// Log in user
-public function loginUser() {
-    $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
-    $stmt = $this->conn->prepare($query);
+    public function loginUser()
+    {
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
+        $stmt = $this->conn->prepare($query);
 
-    $stmt->bindParam(':email', $this->username); // Use email as the parameter
-    $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->bindParam(':email', $this->username); // Use email as the parameter
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($row && password_verify($this->password, $row['password'])) {
-        if ($row['code'] == 0) {
-            return $row; // User is verified and login is successful
-        } else {
-            return 'unverified'; // User exists but is not verified
+        if ($row && password_verify($this->password, $row['password'])) {
+            if ($row['code'] == 0) {
+                return $row; // User is verified and login is successful
+            } else {
+                return 'unverified'; // User exists but is not verified
+            }
         }
+        return null; // Login failed, return null
     }
-    return null; // Login failed, return null
-}
 
 
 
-    
-       // Check if email already exists
-       public function checkEmailExistence($email) {
+
+    // Check if email already exists
+    public function checkEmailExistence($email)
+    {
         $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $email);
@@ -177,7 +187,8 @@ public function loginUser() {
     }
 
     // Login user with email existence check
-    public function loginWithEmailExistence($email) {
+    public function loginWithEmailExistence($email)
+    {
         // Check if email exists
         if ($this->checkEmailExistence($email)) {
             // Proceed with login
@@ -190,9 +201,41 @@ public function loginUser() {
             return null; // Return null if email doesn't exist
         }
     }
+    // Update user's password
+    public function updatePassword()
+    {
+        // Validate the new password
+        $errors = $this->validateUserData('', '', $this->email, $this->password);
+
+        // Check if there are any validation errors
+        if (!empty ($errors)) {
+            return $errors; // Return validation errors if any
+        }
+
+        // Prepare the query to update the password
+        $query = 'UPDATE ' . $this->table . ' SET password = :password WHERE email = :email';
+
+        // Hash the new password
+        $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+
+        // Prepare and bind parameters
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':password', $hashedPassword);
+        $stmt->bindParam(':email', $this->email);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            return true; // Password updated successfully
+        } else {
+            printf("Error: %s.\n", $stmt->error);
+            return false; // Password update failed
+        }
+    }
+
 
     // Read all users
-    public function readUsers() {
+    public function readUsers()
+    {
         $query = 'SELECT * FROM ' . $this->table;
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -200,7 +243,8 @@ public function loginUser() {
     }
 
     // Read single user by ID
-    public function readUserById() {
+    public function readUserById()
+    {
         $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $this->id);
@@ -208,7 +252,8 @@ public function loginUser() {
         return $stmt;
     }
 
-    public function getUserDetailsByEmail($email) {
+    public function getUserDetailsByEmail($email)
+    {
         $query = 'SELECT * FROM ' . $this->table . ' WHERE email = :email';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $email);
@@ -216,10 +261,11 @@ public function loginUser() {
         $userDetails = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch user details
         return $userDetails; // Return user details as an associative array
     }
-    
-    
+
+
     // Update user
-    public function updateUser() {
+    public function updateUser()
+    {
         $query = 'UPDATE ' . $this->table . ' 
                   SET username = :username, password = :password, email = :email, role = :role, registration_date = :registration_date, is_super_admin = :is_super_admin
                   WHERE id = :id';
@@ -241,7 +287,8 @@ public function loginUser() {
     }
 
     // Delete user
-    public function deleteUser() {
+    public function deleteUser()
+    {
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $this->id);
@@ -253,7 +300,8 @@ public function loginUser() {
     }
 
     // Update user to admin role
-    public function promoteToAdmin() {
+    public function promoteToAdmin()
+    {
         $query = 'UPDATE ' . $this->table . ' SET role = :role WHERE id = :id';
         $stmt = $this->conn->prepare($query);
 
@@ -270,7 +318,8 @@ public function loginUser() {
     }
 
     // Downgrade admin to user role
-    public function demoteToUser() {
+    public function demoteToUser()
+    {
         $query = 'UPDATE ' . $this->table . ' SET role = :role WHERE id = :id';
         $stmt = $this->conn->prepare($query);
 

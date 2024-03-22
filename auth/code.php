@@ -1,3 +1,9 @@
+<?php
+session_start();
+if(isset($_SESSION['unverified'])){
+  $msg="Your email is not verified. A code has been sent to your email. ";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,6 +27,9 @@
             </h1>
 
           <form action="#" method="POST" enctype="multipart/form-data" autocomplete="off">
+          <div class="msg-text" style="display: <?php echo ($msg != '') ? 'block' : 'none'; ?>">
+        <?php echo $msg; ?>
+    </div>
                 <div class="error-text"></div>
                   <div class="inputContainer">
                       <input type="text" class="inputLogin" placeholder=" " name="otp">

@@ -22,8 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['email'] = $userDetails['email'];
         $_SESSION['username'] = $userDetails['username'];
 
-        // Echo "success" to indicate successful verification
-        echo 'success';
+        // Check if session variable "msg" is set to "pass-reset"
+        if (isset($_SESSION['msg']) && $_SESSION['msg'] === "pass-reset") {
+            echo 'newpassword'; // Echo "pass-reset" if session variable is set to "pass-reset"
+        } else {
+            $_SESSION['wlcm-msg']="wlcm-msg";
+            echo 'success'; // Echo "success" if session variable is not set or has a different value
+        }
     } else {
         // Echo the result (error message) returned by the verification method
         echo $result;

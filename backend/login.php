@@ -51,13 +51,14 @@ if (isset ($_POST['email'], $_POST['password'])) {
                 // Update verification code in the database
                 $user->updateVerificationCode($email, $verificationCode);
                 $_SESSION['email'] = $email;
+                $_SESSION['unverified']="unverified";
                 // Send a specific response indicating that the verification code has been resent
                 echo "resent";
             } elseif ($loggedInUser) {
                 // Set email and username in session
                 $_SESSION['email'] = $loggedInUser['email'];
                 $_SESSION['username'] = $loggedInUser['username'];
-
+                $_SESSION['wlcm-bck']="wc";
                 // Send a specific response indicating successful login
                 echo "success";
             } else {

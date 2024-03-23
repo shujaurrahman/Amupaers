@@ -30,6 +30,7 @@ else {
    $msg = ""; // Set empty message if not set
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,145 +45,101 @@ else {
   require_once "../includes/header.php";
   ?>
   <br><br><br><br>
-  <!-- <h2>Hello, Shuja ur Rahman </h2> -->
-        <section class="section category" aria-label="category">
+      <section class="section service" id="services">
         <div class="container">
         <div class="msg-text" style="display: <?php echo ($msg != '') ? 'block' : 'none'; ?>">
         <?php echo $msg; ?>
-    </div>
-          <p class="section-subtitle">Trending</p>
+        </div>
+          <h2 class="h2 section-title">Select category to continue</h2>
 
-          <h2 class="h2 section-title">Popular Papers To Solve </h2>
+          <p class="section-text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam expedita dignissimos omnis voluptatem inventore repellendus, 
+          </p>
 
-          <ul class="grid-list">
+          <ul class="service-list">
 
             <li>
-              <div class="category-card">
+              <div class="service-card">
 
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Personal Development</a>
+                <figure class="card-banner">
+                  <img src="../assets/images/service-1.gif" width="728" height="344" loading="lazy" alt="support"
+                    class="w-100">
+                </figure>
+
+                <div class="card-content">
+
+                  <h3 class="h3">
+                    <a href="../papers/entrance.php" class="card-title">Entrance Papers</a>
                   </h3>
 
-                  <span class="card-meta">39 Course</span>
+                  <p class="card-text">
+                    
+                  </p>
+
+                  <a href="#" class="btn-link">
+                    <span class="span">Learn More</span>
+
+                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                  </a>
+
                 </div>
 
               </div>
             </li>
 
             <li>
-              <div class="category-card">
+              <div class="service-card">
 
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Human Research</a>
+                <figure class="card-banner">
+                  <img src="../assets/images/service-2.gif" width="728" height="344" loading="lazy" alt="Engagement"
+                    class="w-100">
+                </figure>
+
+                <div class="card-content">
+
+                  <h3 class="h3">
+                    <a href="#" class="card-title">Endsems Papers</a>
                   </h3>
 
-                  <span class="card-meta">24 Course</span>
+                  <p class="card-text">
+             
+                  </p>
+
+                  <a href="#" class="btn-link">
+                    <span class="span">Learn More</span>
+
+                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                  </a>
+
                 </div>
 
               </div>
             </li>
 
             <li>
-              <div class="category-card">
+              <div class="service-card">
 
+                <figure class="card-banner">
+                  <img src="../assets/images/service-3.gif" width="728" height="344" loading="lazy" alt="Marketing"
+                    class="w-100">
+                </figure>
 
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Art & Design</a>
+                <div class="card-content">
+
+                  <h3 class="h3">
+                    <a href="#" class="card-title">Sessionals Papers</a>
                   </h3>
 
-                  <span class="card-meta">39 Course</span>
-                </div>
+                  <p class="card-text">
+            
+                  </p>
 
-              </div>
-            </li>
+                  <a href="#" class="btn-link">
+                    <span class="span">Learn More</span>
 
-            <li>
-              <div class="category-card">
+                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                  </a>
 
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Business Management</a>
-                  </h3>
-
-                  <span class="card-meta">39 Course</span>
-                </div>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="category-card">
-
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Web Development</a>
-                  </h3>
-
-                  <span class="card-meta">39 Course</span>
-                </div>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="category-card">
-
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Lifestyle</a>
-                  </h3>
-
-                  <span class="card-meta">39 Course</span>
-                </div>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="category-card">
-
-
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Digital Marketing</a>
-                  </h3>
-
-                  <span class="card-meta">39 Course</span>
-                </div>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="category-card">
-
-
-
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Data Sciences</a>
-                  </h3>
-
-                  <span class="card-meta">39 Course</span>
-                </div>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="category-card">
-
-
-
-                <div>
-                  <h3 class="h3 card-title">
-                    <a href="#">Health & Fitness</a>
-                  </h3>
-
-                  <span class="card-meta">39 Course</span>
                 </div>
 
               </div>

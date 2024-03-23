@@ -23,7 +23,7 @@ img,
 span,
 input,
 button,
-ion-icon { display: block; }
+/* ion-icon { display: block; } */
 
 img { height: auto; }
 
@@ -345,6 +345,137 @@ body {
   background-color: var(--ultramarine-blue);
 }
 
+
+/*-----------------------------------*\
+  #dashboard category
+\*-----------------------------------*/
+
+.service { background-color: var(--white-1); }
+
+.service :is(.section-title, .section-text) { text-align: center; }
+
+.service .section-text { margin-block: 10px 35px; }
+
+.service-list {
+  display: grid;
+  gap: 25px;
+}
+
+.service-card {
+  border-radius: var(--radius-6);
+  overflow: hidden;
+  box-shadow: var(--shadow-1);
+}
+
+.service-card .card-banner {
+  background-color: var(--light-gray);
+  aspect-ratio: 1 / 0.47;
+}
+
+.service-card .card-content { padding: 20px; }
+
+.service-card .card-title { transition: var(--transition-1); }
+
+.service-card .card-title:is(:hover, :focus) { color: var(--ultramarine-blue); }
+
+.service-card .card-text {
+  margin-block: 10px 20px;
+  line-height: 1.8;
+}
+
+.service-card .btn-link { color: var(--green); }
+.service-card .btn-link:hover { color: var(--black); }
+
+
+
+
+
+/*-----------------------------------*\
+  #FEATURES
+\*-----------------------------------*/
+
+.features { background-color: var(--white-2); }
+
+.features .section-text { margin-block: 10px 15px; }
+
+.features-content { margin-block-end: 25px; }
+
+.features-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--white-1);
+  padding: 15px;
+  box-shadow: var(--shadow-3);
+  border-radius: var(--radius-6);
+}
+
+.features-item:not(:last-child) { margin-block-end: 15px; }
+
+.features-item .item-title {
+  color: var(--black);
+  font-size: var(--fs-5);
+  font-weight: var(--fw-600);
+}
+
+.features-banner {
+  max-width: max-content;
+  background-color: var(--light-gray);
+  border-radius: var(--radius-12);
+  overflow: hidden;
+}
+
+.features-banner.one {
+  aspect-ratio: 1 / 0.83;
+  margin-block-end: 25px;
+}
+
+.features-banner.two {
+  margin-inline: auto;
+  aspect-ratio: 1 / 0.71;
+}
+/**
+ * responsive for large than 575px screen
+ */
+
+ @media (min-width: 575px) {
+
+  
+
+  .service-list,
+  .about-list,
+  .stats-list,
+  .footer-top .container { grid-template-columns: 1fr 1fr; }
+
+}
+@media (min-width: 768px) {
+
+
+  .container { max-width: 720px; }
+
+  .service-card { --radius-6: 16px; }
+
+  .service-card .card-content { padding: 30px; }
+
+
+}
+
+
+/**
+ * responsive for large than 992px screen
+ */
+
+ @media (min-width: 992px) {
+
+ 
+
+  .container { max-width: 960px; }
+
+  .service-list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+}
 
 
 
@@ -768,12 +899,11 @@ body {
 }
 .msg-text{
   color: #fff;
-  /* color: var(--ultramarine-blue); */
-  padding: 10px 10px;
-  text-align: center;
+  padding: 6px 15px;
   border-radius: 10px;
   background: var(--ultramarine-blue);
   border: 1px solid #f5c6cb;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  width: 25rem;
   display: none;
 }

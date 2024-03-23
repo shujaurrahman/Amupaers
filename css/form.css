@@ -181,7 +181,7 @@ input {
 
 #contactForm .submitButton {
     position: absolute; /* Set position to absolute */
-    bottom: 60px; /* Align the button at the bottom */
+    bottom: -6px; /* Align the button at the bottom */
     width: 75%;
 }
 

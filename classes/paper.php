@@ -8,11 +8,16 @@ class Paper
     public $id;
     public $title;
     public $category;
+    public $department;
+    public $course;
     public $subject;
+    public $tags;
     public $year;
     public $file_path;
+    public $view_count;
     public $uploaded_by;
     public $upload_date;
+    public $status='pending';
 
     public function __construct($db)
     {
@@ -37,59 +42,71 @@ class Paper
         $stmt->execute();
         return $stmt;
     }
-
-    // Add paper
     public function addPaper()
     {
+        // Validate status
+        if (!in_array($this->status, ['pending', 'approved', 'rejected'])) {
+            echo "Invalid status. Status must be one of 'pending', 'approved', or 'rejected'.";
+            return false;
+        }
+    
+        // Check if subject is set, if not, set it to NULL
+        if (!isset($this->subject) || empty($this->subject)) {
+            $subject = null;
+        } else {
+            $subject = $this->subject;
+        }
+    
         $query = 'INSERT INTO ' . $this->table . ' 
-                  SET title = :title, category = :category, subject = :subject, 
-                      year = :year, file_path = :file_path, uploaded_by = :uploaded_by';
+                  SET title = :title, category = :category, department = :department, 
+                      course = :course, subject = :subject, tags = :tags, year = :year, 
+                      file_path = :file_path, uploaded_by = :uploaded_by, status = :status';
         $stmt = $this->conn->prepare($query);
-
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->category = htmlspecialchars(strip_tags($this->category));
-        $this->subject = htmlspecialchars(strip_tags($this->subject));
-        $this->year = htmlspecialchars(strip_tags($this->year));
-        $this->file_path = htmlspecialchars(strip_tags($this->file_path));
-        $this->uploaded_by = htmlspecialchars(strip_tags($this->uploaded_by));
-
+    
         $stmt->bindParam(':title', $this->title);
         $stmt->bindParam(':category', $this->category);
-        $stmt->bindParam(':subject', $this->subject);
+        $stmt->bindParam(':department', $this->department);
+        $stmt->bindParam(':course', $this->course);
+        $stmt->bindParam(':subject', $subject); // Bind the subject variable
+        $stmt->bindParam(':tags', $this->tags);
         $stmt->bindParam(':year', $this->year);
         $stmt->bindParam(':file_path', $this->file_path);
         $stmt->bindParam(':uploaded_by', $this->uploaded_by);
-
+        $stmt->bindParam(':status', $this->status);
+    
         if ($stmt->execute()) {
             return true;
         }
         printf("Error: %s.\n", $stmt->error);
         return false;
     }
-
+    
     // Update paper
     public function updatePaper()
     {
+        // Validate status
+        if (!in_array($this->status, ['pending', 'approved', 'rejected'])) {
+            echo "Invalid status. Status must be one of 'pending', 'approved', or 'rejected'.";
+            return false;
+        }
+
         $query = 'UPDATE ' . $this->table . ' 
-                  SET title = :title, category = :category, subject = :subject, 
-                      year = :year, file_path = :file_path, uploaded_by = :uploaded_by
+                  SET title = :title, category = :category, department = :department, 
+                      course = :course, subject = :subject, tags = :tags, year = :year, 
+                      file_path = :file_path, uploaded_by = :uploaded_by, status = :status
                   WHERE id = :id';
         $stmt = $this->conn->prepare($query);
 
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->category = htmlspecialchars(strip_tags($this->category));
-        $this->subject = htmlspecialchars(strip_tags($this->subject));
-        $this->year = htmlspecialchars(strip_tags($this->year));
-        $this->file_path = htmlspecialchars(strip_tags($this->file_path));
-        $this->uploaded_by = htmlspecialchars(strip_tags($this->uploaded_by));
-        $this->id = htmlspecialchars(strip_tags($this->id));
-
         $stmt->bindParam(':title', $this->title);
         $stmt->bindParam(':category', $this->category);
+        $stmt->bindParam(':department', $this->department);
+        $stmt->bindParam(':course', $this->course);
         $stmt->bindParam(':subject', $this->subject);
+        $stmt->bindParam(':tags', $this->tags);
         $stmt->bindParam(':year', $this->year);
         $stmt->bindParam(':file_path', $this->file_path);
         $stmt->bindParam(':uploaded_by', $this->uploaded_by);
+        $stmt->bindParam(':status', $this->status);
         $stmt->bindParam(':id', $this->id);
 
         if ($stmt->execute()) {
@@ -98,14 +115,19 @@ class Paper
         printf("Error: %s.\n", $stmt->error);
         return false;
     }
+    
+    // Approve paper (update status to 'approved')
+    public function approvePaper()
+    {
+        $this->status = 'approved';
+        return $this->updatePaper(); // Call updatePaper method to apply changes
+    }
 
     // Delete paper
     public function deletePaper()
     {
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
         $stmt = $this->conn->prepare($query);
-
-        $this->id = htmlspecialchars(strip_tags($this->id));
 
         $stmt->bindParam(':id', $this->id);
 
@@ -157,6 +179,10 @@ class Paper
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Get papers by subject
+
+
 
     // Get papers by subject
     public function getPapersBySubject($subject)
@@ -425,35 +451,3 @@ class Paper
 
 
 ?>
-
-
-<!-- // Include the database class file
-require_once 'Database.php';
-
-// Create a new instance of the Database class
-$database = new Database();
-
-// Get the database connection
-$conn = $database->getConnection(); -->
-
-<!-- // Include the Paper class file
-require_once 'Paper.php';
-
-// Create a new instance of the Paper class
-$paper = new Paper($conn);
-
-// Example usage: Get all papers
-$result = $paper->getAllPapers();
-
-// Example usage: Add a new paper
-$paper->title = 'Sample Paper';
-$paper->category = 'endsem';
-$paper->subject = 'Sample Subject';
-$paper->year = 2024;
-$paper->file_path = '/path/to/file';
-$paper->uploaded_by = 1; // User ID who uploaded the paper
-if ($paper->addPaper()) {
-    echo 'Paper added successfully.';
-} else {
-    echo 'Failed to add paper.';
-} -->

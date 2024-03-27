@@ -26,16 +26,14 @@
             <a href="#about" class="navbar-link" data-nav-toggler>Assign Admin</a>
           </li>
 
+
+
           <li class="navbar-item">
-            <a href="#" class="navbar-link" data-nav-toggler>Add Paper</a>
+            <a href="" class="navbar-link" data-nav-toggler>Papers</a>
           </li>
 
           <li class="navbar-item">
-            <a href="#" class="navbar-link" data-nav-toggler>All Papers</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="" class="navbar-link" data-nav-toggler>Querries</a>
+            <a href="http://localhost/amupapers/admin/testimonials.php" class="navbar-link" data-nav-toggler>Querries</a>
           </li>
 
         </ul>
@@ -43,13 +41,22 @@
       </nav>
 
       <div class="header-actions">
-
-        <a href="" class="header-action-btn login-btn">
-          <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
-
-          <span class="span">Logout</span>
-        </a>
-
+        <?php
+      session_start();
+      $current_url = $_SERVER['REQUEST_URI'];
+      if (isset ($_SESSION['username'])) {
+        // If user is logged in
+        if (strpos($current_url, '/admin/adminDashboard.php') !== false) {
+          // If user is on the dashboard page, display the username
+          echo '<a href="http://localhost/amupapers/admin/adminDashboard.php" class="header-action-btn login-btn">' . $_SESSION['username'] . '</a>';
+        } else {
+          // If user is not on the dashboard page, display "Dashboard"
+          echo '<a href="http://localhost/amupapers/admin/adminDashboard.php" class="header-action-btn login-btn">Dashboard</a>';
+        }
+        // Display logout button
+        echo '<a href="http://localhost/amupapers/backend/logout.php" class="header-action-btn logout-btn">Logout</a>';
+      } 
+      ?>
         <button class="header-action-btn nav-open-btn" aria-label="Open menu" data-nav-toggler>
           <ion-icon name="menu-outline"></ion-icon>
         </button>
@@ -59,4 +66,5 @@
       <div class="overlay" data-nav-toggler data-overlay></div>
 
     </div>
+    <script src="http://localhost/amupapers/js/script.js" defer></script>
   </header>

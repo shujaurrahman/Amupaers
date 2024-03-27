@@ -20,26 +20,33 @@
         <li class="navbar-item">
           <a href="http://localhost/amupapers/index.php" class="navbar-link" data-nav-toggler>Home</a>
         </li>
+        <?php
+                if (strpos($_SERVER['REQUEST_URI'], '/index.php') == true){
+                  echo ' <li class="navbar-item">
+                  <a href="#about" class="navbar-link" data-nav-toggler>About</a>
+                </li>';
+                }
+        ?>
 
-        <li class="navbar-item">
-          <a href="#about" class="navbar-link" data-nav-toggler>About</a>
-        </li>
-
-        <li class="navbar-item">
-          <a href="#" class="navbar-link" data-nav-toggler>Blog</a>
-        </li>
-
+      <?php
+      session_start();
+      if(isset($_SESSION['username'])){
+        echo '        <li class="navbar-item">
+        <a href="http://localhost/amupapers/pages/addpaper.php" class="navbar-link" data-nav-toggler>Add Paper</a>
+      </li>';
+      }
+?>
+          <li class="navbar-item">
+            <a href="#" class="navbar-link" data-nav-toggler>Blog</a>
+          </li>
         <li class="navbar-item">
           <a href="http://localhost/amupapers/pages/contact.php" class="navbar-link" data-nav-toggler>Contact</a>
         </li>
-
       </ul>
-
     </nav>
 
     <div class="header-actions">
       <?php
-      session_start();
       $current_url = $_SERVER['REQUEST_URI'];
       if (isset ($_SESSION['username'])) {
         // If user is logged in

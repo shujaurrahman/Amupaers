@@ -84,3 +84,14 @@ window.addEventListener('DOMContentLoaded', () => {
       }, 5000); // 5000 milliseconds = 5 seconds
   }
 });
+window.addEventListener('DOMContentLoaded', () => {
+  const msgTextLong = document.querySelector('.msg-long');
+  if (msgTextLong.textContent.trim() !== '') {
+      msgTextLong.style.display = 'block'; // Display the element if it has content
+
+      // Set a timer to hide the message after 5 seconds
+      setTimeout(() => {
+          msgTextLong.style.display = 'none';
+      }, 5000); // 5000 milliseconds = 5 seconds
+  }
+});

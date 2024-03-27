@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+$msgLong="";
 // Check if the user is not logged in, then redirect them to the login page
 if (!isset($_SESSION['username'])) {
     header("Location: http://localhost/amupapers/pages/login.php");
@@ -29,6 +29,13 @@ elseif(isset($_SESSION['wlcm-bck'])){
 else {
    $msg = ""; // Set empty message if not set
 }
+if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSION['p_cat'])&& isset($_SESSION['p_course']) && isset($_SESSION['tk'])) {
+  $msgLong = $_SESSION['p_success'];
+  $msg=$_SESSION['tk'];
+  unset($_SESSION['p_success']);
+  unset($_SESSION['tk']);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +46,13 @@ else {
     <title>Dashboard</title>
     <?php require_once "../assets/fonts.php"?>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+              :root{
+            --section-padding: 50px !important;
+        }
+    </style>
 </head>
+
 <body>
 <?php
   require_once "../includes/header.php";
@@ -47,10 +60,13 @@ else {
   <br><br><br><br>
       <section class="section service" id="services">
         <div class="container">
-        <div class="msg-text" style="display: <?php echo ($msg != '') ? 'block' : 'none'; ?>">
-        <?php echo $msg; ?>
-        </div>
-          <h2 class="h2 section-title">Select category to continue</h2>
+          <div class="msg-long" style="display: <?php echo ($msgLong != '') ? 'block' : 'none'; ?>">
+            <?php echo $msgLong; ?>
+          </div>
+          <div class="msg-text" style="display: <?php echo ($msg != '') ? 'block' : 'none'; ?>">
+          <?php echo $msg; ?>
+          </div>
+          <h2 class="h2 section-title">Get Papers Department Wise</h2>
 
           <p class="section-text">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam expedita dignissimos omnis voluptatem inventore repellendus, 
@@ -69,7 +85,7 @@ else {
                 <div class="card-content">
 
                   <h3 class="h3">
-                    <a href="../papers/entrance.php" class="card-title">Entrance Papers</a>
+                  <a href="papers.php?category=Entrance" class="card-title">Entrance Papers</a>
                   </h3>
 
                   <p class="card-text">
@@ -98,7 +114,7 @@ else {
                 <div class="card-content">
 
                   <h3 class="h3">
-                    <a href="#" class="card-title">Endsems Papers</a>
+                    <a href="papers.php?category=Semester" class="card-title">Endsems Papers</a>
                   </h3>
 
                   <p class="card-text">
@@ -127,14 +143,14 @@ else {
                 <div class="card-content">
 
                   <h3 class="h3">
-                    <a href="#" class="card-title">Sessionals Papers</a>
+                    <a href="papers.php?category=Sessional" class="card-title">Sessionals Papers</a>
                   </h3>
 
                   <p class="card-text">
             
                   </p>
 
-                  <a href="#" class="btn-link">
+                  <a href="papers.php?category=Sessional" class="btn-link">
                     <span class="span">Learn More</span>
 
                     <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -146,12 +162,21 @@ else {
             </li>
 
           </ul>
+          <br>
+          <div class="hero-content">
+
+            <p class="section-subtitle">or Fetch All paper</p>
+
+            <a href="" class="btn btn-primary">
+              <span class="span">Click here</span>
+
+              <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+            </a>
+
+          </div>
 
         </div>
       </section>
-      <?php
-    require_once "../includes/footer.php";
-    ?>
   <script src="../js/script.js" defer></script>
 
 </body>

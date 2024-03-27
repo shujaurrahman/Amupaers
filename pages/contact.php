@@ -43,9 +43,6 @@
 
             </div>
         </div>
-    <?php
-    require_once "../includes/footer.php";
-    ?>
     </section>
     <script src="../js/script.js" defer></script>
 

@@ -6,19 +6,18 @@ require_once '../classes/User.php';
 require_once '../classes/Database.php';
 
 session_start();
-
 $database = new Database();
 $conn = $database->getConnection();
 
 if (isset ($_POST['email'], $_POST['password'])) {
-    // Initialize User object
+   
     $user = new User($conn);
 
-    // Get email and password from the form
+
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Validate email and password
+    
     $errors = array();
     if (empty ($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Invalid email format.";
@@ -28,17 +27,17 @@ if (isset ($_POST['email'], $_POST['password'])) {
     }
 
     if (!empty ($errors)) {
-        // Output validation errors
+       
         foreach ($errors as $error) {
             echo $error;
         }
     } else {
-        // Check if the email exists
+        
         if (!$user->checkEmailExistence($email)) {
             echo "Email doesn't exist. Please register first.";
         } else {
             // Log in user
-            $user->username = $email; // Assuming email is used as the username for login
+            $user->username = $email; 
             $user->password = $password;
 
             $loggedInUser = $user->loginUser();
@@ -59,8 +58,22 @@ if (isset ($_POST['email'], $_POST['password'])) {
                 $_SESSION['email'] = $loggedInUser['email'];
                 $_SESSION['username'] = $loggedInUser['username'];
                 $_SESSION['wlcm-bck']="wc";
-                // Send a specific response indicating successful login
-                echo "success";
+                $_SESSION['role']=""; 
+                    // Check if the user is a superadmin
+                        if ($loggedInUser['role'] == 'super_admin') {
+                            // Set additional session data for superadmin
+                            $_SESSION['role'] = 'super admin';
+                        }
+                        if ($loggedInUser['role'] == 'admin') {
+                            // Set additional session data for superadmin
+                            $_SESSION['role'] = 'admin';
+                        }
+                        // Redirect based on user role
+                        if ($_SESSION['role'] == 'super admin' || $_SESSION['role'] == 'admin') {
+                            echo "admin";
+                        } else {
+                            echo "success";
+                        }
             } else {
                 echo "Invalid email or password.";
                 // Or handle other error cases if needed

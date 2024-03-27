@@ -907,3 +907,13 @@ body {
   width: 25rem;
   display: none;
 }
+
+.msg-long {
+  color: #fff;
+  padding: 6px 15px;
+  border-radius: 10px;
+  background: var(--ultramarine-blue);
+  border: 1px solid #f5c6cb;
+  max-width: 100%; /* Limit width to 100% of the parent container */
+  display: none;
+}

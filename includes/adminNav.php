@@ -19,17 +19,11 @@
         <ul class="navbar-list">
 
           <li class="navbar-item">
-            <a href="http://localhost/amupapers/admin/adminDashboard.php" class="navbar-link" data-nav-toggler>Dashboard</a>
+            <a href="http://localhost/amupapers/admin/adminDashboard.php" class="navbar-link" data-nav-toggler>Home</a>
           </li>
 
           <li class="navbar-item">
-            <a href="#about" class="navbar-link" data-nav-toggler>Assign Admin</a>
-          </li>
-
-
-
-          <li class="navbar-item">
-            <a href="" class="navbar-link" data-nav-toggler>Papers</a>
+            <a href="http://localhost/amupapers/admin/actionpaper.php" class="navbar-link" data-nav-toggler>Papers</a>
           </li>
 
           <li class="navbar-item">

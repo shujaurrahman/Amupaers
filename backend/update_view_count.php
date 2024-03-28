@@ -2,7 +2,7 @@
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once '../classes/database.php'; // Include the Database class
+require_once '../classes/database.php';
 require_once '../classes/paper.php';
 
 // Initialize Database connection
@@ -22,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["paper_id"])) {
 
     // Send a response indicating success
     http_response_code(200);
-    echo "View count updated successfully for paper with ID: " . $paperId . ". New view count: " . $viewCount;
 } else {
     // If the request method is not POST or the paper_id parameter is missing, return a bad request response
     http_response_code(400);

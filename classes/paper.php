@@ -33,15 +33,6 @@ class Paper
         return $stmt;
     }
 
-    // Get single paper
-    public function getPaper()
-    {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE id = ?';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->id);
-        $stmt->execute();
-        return $stmt;
-    }
     public function addPaper()
     {
         // Validate status
@@ -179,42 +170,6 @@ class Paper
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    // Get papers by subject
-
-
-
-    // Get papers by subject
-    public function getPapersBySubject($subject)
-    {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE subject = :subject';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':subject', $subject);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Get papers by year
-    public function getPapersByYear($year)
-    {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE year = :year';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':year', $year);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Get papers by category and year
-    public function getPapersByCategoryAndYear($category, $year)
-    {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE category = :category AND year = :year';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':category', $category);
-        $stmt->bindParam(':year', $year);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     // Search papers by title
     public function searchPapers($keyword)
     {
@@ -225,48 +180,8 @@ class Paper
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    // Add paper with tags
-    public function addPaperWithTags($title, $category, $subject, $year, $file_path, $uploaded_by, $tags)
-    {
-        $query = 'INSERT INTO ' . $this->table . ' 
-              SET title = :title, category = :category, subject = :subject, 
-                  year = :year, file_path = :file_path, uploaded_by = :uploaded_by, tags = :tags';
-        $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':category', $category);
-        $stmt->bindParam(':subject', $subject);
-        $stmt->bindParam(':year', $year);
-        $stmt->bindParam(':file_path', $file_path);
-        $stmt->bindParam(':uploaded_by', $uploaded_by);
-        $stmt->bindParam(':tags', $tags);
 
-        if ($stmt->execute()) {
-            return true;
-        }
-        printf("Error: %s.\n", $stmt->error);
-        return false;
-    }
-    // Update paper details including tags
-    public function updatePaperDetails($paperId, $title, $category, $year, $tags)
-    {
-        $query = 'UPDATE ' . $this->table . ' 
-              SET title = :title, category = :category, year = :year, tags = :tags
-              WHERE id = :paperId';
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(':title', $title);
-        $stmt->bindParam(':category', $category);
-        $stmt->bindParam(':year', $year);
-        $stmt->bindParam(':tags', $tags);
-        $stmt->bindParam(':paperId', $paperId);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-        printf("Error: %s.\n", $stmt->error);
-        return false;
-    }
     // Get papers by tag
     public function getPapersByTag($tag)
     {
@@ -297,6 +212,7 @@ class Paper
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     // Increment view count for a paper
     public function incrementViewCount($paperId)
     {
@@ -381,24 +297,7 @@ class Paper
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function getRelatedPapersByYear($paperId, $limit = 5)
-    {
-        // Retrieve year of the specified paper
-        $query = 'SELECT year FROM papers WHERE id = :paper_id';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':paper_id', $paperId);
-        $stmt->execute();
-        $year = $stmt->fetch(PDO::FETCH_COLUMN);
 
-        // Find papers from the same year
-        $query = 'SELECT * FROM papers WHERE year = :year AND id != :paper_id LIMIT :limit';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':year', $year);
-        $stmt->bindParam(':paper_id', $paperId);
-        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
     // Get related papers based on multiple criteria
     public function getRelatedPapers($paperId, $limit = 5)
     {
@@ -411,11 +310,8 @@ class Paper
         // Get related papers by department
         $relatedByDepartment = $this->getRelatedPapersByDepartment($paperId, $limit);
 
-        // Get related papers by year
-        $relatedByYear = $this->getRelatedPapersByYear($paperId, $limit);
-
         // Combine related papers from all criteria into a single array
-        $relatedPapers = array_merge($relatedByTags, $relatedByCourse, $relatedByDepartment, $relatedByYear);
+        $relatedPapers = array_merge($relatedByTags, $relatedByCourse, $relatedByDepartment);
 
         // Count occurrences of each paper ID
         $counts = array_count_values(array_column($relatedPapers, 'id'));
@@ -425,27 +321,47 @@ class Paper
 
         // Return top $limit papers
         return array_slice($counts, 0, $limit);
-    }
-    public function filterPapersByCategory($category) {
-        $query = 'SELECT * FROM papers WHERE category = :category';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':category', $category);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    public function sortPapersByUploadDate($order = 'DESC') {
-        $query = 'SELECT * FROM papers ORDER BY upload_date ' . $order;
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    public function getPaperCountByCategory() {
-        $query = 'SELECT category, COUNT(*) AS count FROM papers GROUP BY category';
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-            
+    }      
+    
+        // Method to get papers sorted by upload date
+   // Inside the Paper class
+
+public function getPapersSortedByDateAndCategory($category, $department, $course, $order) {
+    // Prepare SQL query to fetch papers based on category, department, and course sorted by date
+    $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course ORDER BY upload_date $order";
+    
+    // Prepare and execute the query
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':category', $category);
+    $stmt->bindParam(':department', $department);
+    $stmt->bindParam(':course', $course);
+    $stmt->execute();
+
+    // Fetch all papers as an associative array
+    $papers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Return the fetched papers
+    return $papers;
+}
+
+public function getPapersSortedByViewCountAndCategory($category, $department, $course) {
+    // Prepare SQL query to fetch papers based on category, department, and course sorted by view count
+    $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course ORDER BY view_count DESC";
+    
+    // Prepare and execute the query
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':category', $category);
+    $stmt->bindParam(':department', $department);
+    $stmt->bindParam(':course', $course);
+    $stmt->execute();
+
+    // Fetch all papers as an associative array
+    $papers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Return the fetched papers
+    return $papers;
+}
+
 
 }
 

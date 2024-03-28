@@ -27,10 +27,10 @@ class Paper
     // Get all papers
     public function getAllPapers()
     {
-        $query = 'SELECT * FROM ' . $this->table;
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE status = "pending"';
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function addPaper()
@@ -153,14 +153,18 @@ class Paper
     // Get papers by category, department, and course
     public function getPapersByCategoryDepartmentCourse($category, $department, $course)
     {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE category = :category AND department = :department AND course = :course';
+        $status = 'approved'; 
+    
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE category = :category AND department = :department AND course = :course AND status = :status';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':category', $category);
         $stmt->bindParam(':department', $department);
         $stmt->bindParam(':course', $course);
+        $stmt->bindParam(':status', $status); 
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
     // Get papers uploaded by a specific user
     public function getPapersByUser($userId)
     {
@@ -170,6 +174,7 @@ class Paper
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     // Search papers by title
     public function searchPapers($keyword)
     {
@@ -323,12 +328,12 @@ class Paper
         return array_slice($counts, 0, $limit);
     }      
     
-        // Method to get papers sorted by upload date
-   // Inside the Paper class
-
 public function getPapersSortedByDateAndCategory($category, $department, $course, $order) {
+
+    $status = 'approved'; 
+
     // Prepare SQL query to fetch papers based on category, department, and course sorted by date
-    $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course ORDER BY upload_date $order";
+    $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course AND status=:status ORDER BY upload_date $order";
     
     // Prepare and execute the query
     $stmt = $this->conn->prepare($query);
@@ -345,8 +350,9 @@ public function getPapersSortedByDateAndCategory($category, $department, $course
 }
 
 public function getPapersSortedByViewCountAndCategory($category, $department, $course) {
+    $status = 'approved'; 
     // Prepare SQL query to fetch papers based on category, department, and course sorted by view count
-    $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course ORDER BY view_count DESC";
+    $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course AND status= :status ORDER BY view_count DESC";
     
     // Prepare and execute the query
     $stmt = $this->conn->prepare($query);

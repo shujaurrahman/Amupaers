@@ -9,6 +9,20 @@
     <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="../css/filter.css">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+                .error-text {
+            color: #fff;
+            /* color: var(--ultramarine-blue); */
+            padding: 5px 15px;
+            text-align: center;
+            border-radius: 6px;
+            background: var(--ultramarine-blue);
+            border: 1px solid #f5c6cb;
+            margin-bottom: 20px;
+            display: none;
+            width: 27rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -36,7 +50,6 @@
             // Populate options for Department dropdown based on the category
             $departments = $paper->getDepartmentsByCategory($category);
             ?>
-            <div class="error-text"></div>
 
             <section class="filter-papers section category">
                 <div class="dropdown-container">
@@ -59,15 +72,16 @@
                     </div>
 
                     <div class="inputContainer">
-                        <select id="other-filter-select" class="inputLogin">
-                            <option value="">Newest</option>
-                            <option value="">Oldest</option>
-                            <option value="">Popular</option>
-                            <!-- Populate options dynamically for other filters -->
-                        </select>
+                    <select id="sort-papers" class="inputLogin" onchange="sortPapers()">
+                        <option value="newest">Sort</option>
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="popular">Popular</option>
+                    </select>
+
                         <label class="labelLogin">Sort</label>
                     </div>
-                    <button class="go-button">Go</button> <!-- Add Go button -->
+                    <button class="go-button">Search</button> 
                 </div>
             </section>
 
@@ -86,6 +100,7 @@
                     </p>
 
                     <h2 class="h2 section-title">Papers</h2>
+                          <div class="error-text"></div>
 
                     <ul class="grid-list" id="papers-container">
 
@@ -210,7 +225,7 @@
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
                     // Request was successful
-                    console.log("View count updated successfully.");
+                    // console.log("View count updated successfully.");
                 } else {
                     // Error handling
                     console.error("Error updating view count:", xhr.statusText);
@@ -220,6 +235,79 @@
         xhr.send(`paper_id=${paperId}`);
     }
     </script>
+    
+<script>
+function sortPapers() {
+    const sortBy = document.getElementById("sort-papers").value;
+    const department = document.getElementById("department-select").value;
+    const course = document.getElementById("course-select").value;
+
+    // Send AJAX request to fetch sorted papers
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", `../backend/sort_papers.php?category=<?php echo $category; ?>&department=${department}&course=${course}&sort=${sortBy}`, true);
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            // Request was successful
+            // Parse the response as JSON
+            const response = JSON.parse(xhr.responseText);
+            // Update the UI with sorted papers
+            updatePapersUI(response.papers);
+            // Display success message
+            const errorText = document.querySelector('.error-text');
+            errorText.textContent = `Papers sorted in ${sortBy} format.`;
+            errorText.style.display = 'block';
+            // Hide the error text after 5 seconds
+            setTimeout(function() {
+                errorText.style.display = 'none';
+            }, 5000);
+        } else {
+            // Error handling
+            console.error("Request failed:", xhr.statusText);
+        }
+    };
+    xhr.onerror = function() {
+        // Error handling
+        console.error("Request failed.");
+    };
+    xhr.send();
+}
+
+
+function updatePapersUI(papers) {
+    const papersContainer = document.getElementById("papers-container");
+    // Clear existing papers
+    papersContainer.innerHTML = "";
+    // Append sorted papers to the container
+    papers.forEach(function(paper) {
+        // Convert the upload date string to a Date object
+        const uploadDate = new Date(paper['upload_date']);
+        // Get the month name
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        const month = monthNames[uploadDate.getMonth()];
+        // Format the date in the desired format
+        const formattedDate = `${month} ${uploadDate.getDate()}, ${uploadDate.getFullYear()}`;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <div class='category-card' onclick='openPDF(\"${paper['file_path']}\", ${paper['id']})' title='Click to view paper'>
+                <div>
+                    <h3 class='h3 card-title'>
+                        <a href='#'>${paper['title']}</a>
+                    </h3>
+                    <span class='card-meta'>${paper['course']}</span><br>
+                    <span class='card-meta'>Year: ${paper['year']}</span><br>
+                    <span class='card-meta'>Added on: ${formattedDate}</span>
+                </div>
+            </div>
+        `;
+        papersContainer.appendChild(li);
+    });
+}
+
+</script>
+
 
     
 

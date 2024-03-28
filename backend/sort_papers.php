@@ -1,5 +1,6 @@
 <?php
 // Include the necessary classes and files
+require_once '../backend/error.php';
 require_once '../classes/database.php';
 require_once '../classes/paper.php';
 

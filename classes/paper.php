@@ -106,6 +106,28 @@ class Paper
         printf("Error: %s.\n", $stmt->error);
         return false;
     }
+    public function updatePaperStatus($paper_id, $status) {
+        // Validate status
+        if (!in_array($status, ['pending', 'approved', 'rejected'])) {
+            echo "Invalid status. Status must be one of 'pending', 'approved', or 'rejected'.";
+            return false;
+        }
+    
+        // Prepare SQL query to update paper status
+        $query = "UPDATE $this->table SET status = :status WHERE id = :id";
+        
+        // Prepare and execute the query
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':id', $paper_id);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            printf("Error: %s.\n", $stmt->error);
+            return false;
+        }
+    }
+    
     
     // Approve paper (update status to 'approved')
     public function approvePaper()
@@ -328,44 +350,63 @@ class Paper
         return array_slice($counts, 0, $limit);
     }      
     
-public function getPapersSortedByDateAndCategory($category, $department, $course, $order) {
-
-    $status = 'approved'; 
-
-    // Prepare SQL query to fetch papers based on category, department, and course sorted by date
-    $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course AND status=:status ORDER BY upload_date $order";
+    public function getPapersSortedByDateAndCategory($category, $department, $course, $order) {
+        $status = 'approved'; 
     
-    // Prepare and execute the query
+        // Prepare SQL query to fetch papers based on category, department, and course sorted by date
+        $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course AND status = :status ORDER BY upload_date $order";
+        
+        // Prepare and execute the query
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':category', $category);
+        $stmt->bindParam(':department', $department);
+        $stmt->bindParam(':course', $course);
+        $stmt->bindParam(':status', $status); // Add this line to bind status
+        $stmt->execute();
+    
+        // Fetch all papers as an associative array
+        $papers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Return the fetched papers
+        return $papers;
+    }
+    
+    public function getPapersSortedByViewCountAndCategory($category, $department, $course) {
+        $status = 'approved'; 
+        // Prepare SQL query to fetch papers based on category, department, and course sorted by view count
+        $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course AND status = :status ORDER BY view_count DESC";
+        
+        // Prepare and execute the query
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':category', $category);
+        $stmt->bindParam(':department', $department);
+        $stmt->bindParam(':course', $course);
+        $stmt->bindParam(':status', $status); // Add this line to bind status
+        $stmt->execute();
+    
+        // Fetch all papers as an associative array
+        $papers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        // Return the fetched papers
+        return $papers;
+    }
+    
+
+public function getPapersByStatus($status) {
+    // Prepare the query
+    $query = 'SELECT * FROM ' . $this->table . ' WHERE status = :status';
+    
+    // Prepare the statement
     $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(':category', $category);
-    $stmt->bindParam(':department', $department);
-    $stmt->bindParam(':course', $course);
+
+    // Bind the status parameter
+    $stmt->bindParam(':status', $status);
+
+    // Execute the query
     $stmt->execute();
 
-    // Fetch all papers as an associative array
-    $papers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     // Return the fetched papers
-    return $papers;
-}
-
-public function getPapersSortedByViewCountAndCategory($category, $department, $course) {
-    $status = 'approved'; 
-    // Prepare SQL query to fetch papers based on category, department, and course sorted by view count
-    $query = "SELECT * FROM papers WHERE category = :category AND department = :department AND course = :course AND status= :status ORDER BY view_count DESC";
-    
-    // Prepare and execute the query
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(':category', $category);
-    $stmt->bindParam(':department', $department);
-    $stmt->bindParam(':course', $course);
-    $stmt->execute();
-
-    // Fetch all papers as an associative array
-    $papers = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Return the fetched papers
-    return $papers;
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 

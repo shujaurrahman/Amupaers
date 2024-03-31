@@ -95,3 +95,8 @@ window.addEventListener('DOMContentLoaded', () => {
       }, 5000); // 5000 milliseconds = 5 seconds
   }
 });
+// Function to animate counters from zero to the total count
+// Function to animate counters from zero to the total count
+
+
+

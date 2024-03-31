@@ -2,13 +2,13 @@
   <div class="container">
 
     <h1>
-      <a href="#" class="logo">AmuPapers</a>
+      <a href="http://localhost/amupapers/index.php" class="logo">AmuPapers</a>
     </h1>
 
     <nav class="navbar" data-navbar>
 
       <div class="navbar-top">
-        <a href="#" class="logo">AmuPapers</a>
+        <a href="http://localhost/amupapers/index.php" class="logo">AmuPapers</a>
 
         <button class="nav-close-btn" aria-label="Close menu" data-nav-toggler>
           <ion-icon name="close-outline"></ion-icon>
@@ -37,7 +37,7 @@
       }
 ?>
           <li class="navbar-item">
-            <a href="#" class="navbar-link" data-nav-toggler>Blog</a>
+            <a href="http://localhost/amupapers/pages/blog.php" class="navbar-link" data-nav-toggler>Blog</a>
           </li>
         <li class="navbar-item">
           <a href="http://localhost/amupapers/pages/contact.php" class="navbar-link" data-nav-toggler>Contact</a>

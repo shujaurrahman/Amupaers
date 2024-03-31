@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             $username = $_SESSION['username'];
 
             // Construct the message
-            $message = "Paper with id $paper_id $status by $username... Reloading Page.!";
+            $message = "Paper with id $paper_id $status by {$_SESSION['role']} $username. ";
             echo json_encode(["success" => true, "message" => $message]);
         } else {
 

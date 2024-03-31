@@ -1,16 +1,12 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once '../classes/database.php'; // Include the database class file
-require_once '../classes/paper.php'; // Include the Paper class file
 session_start();
-// Create a new instance of the Database class
+
+require_once '../classes/database.php'; 
+require_once '../classes/paper.php'; 
 $database = new Database();
-
-// Get the database connection
 $conn = $database->getConnection();
-
-// Create a new instance of the Paper class
 $paper = new Paper($conn);
 
 // Check if the form is submitted

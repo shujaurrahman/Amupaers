@@ -8,10 +8,11 @@ if (!isset($_SESSION['username'])) {
 }
 
 $name=$_SESSION['username'];
+$email=$_SESSION['email'];
+// $email="shuja";
 // Check if a password change message is set in the session
 if (isset($_SESSION['msg'])) {
     $msg = "Your password was changed";
-    // Clear the session message to avoid displaying it again
     unset($_SESSION['msg']);
 } 
 elseif(isset($_SESSION['unverified'])){
@@ -35,7 +36,9 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
   unset($_SESSION['p_success']);
   unset($_SESSION['tk']);
 }
-
+  // require_once "../backend/error.php";
+  require_once "../classes/paper.php";
+  require_once "../classes/database.php";
 ?>
 
 <!DOCTYPE html>
@@ -44,8 +47,10 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <?php require_once "../assets/fonts.php"?>
+    <!-- <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'> -->
+    <!-- <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script> -->
     <link rel="stylesheet" href="../css/style.css">
+    <?php require_once "../assets/fonts.php"?>
     <style>
               :root{
             --section-padding: 50px !important;
@@ -66,10 +71,10 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
           <div class="msg-text" style="display: <?php echo ($msg != '') ? 'block' : 'none'; ?>">
           <?php echo $msg; ?>
           </div>
-          <h2 class="h2 section-title">Get Papers Department Wise</h2>
+          <h2 class="h2 section-title">Select Category</h2>
 
           <p class="section-text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam expedita dignissimos omnis voluptatem inventore repellendus, 
+            Continue with category and select department & course, get papers of specific choice.<br> Don't forget to give your genuine <a href="mailto:shujaurrehman210@gmail.com" style="color:var(--ultramarine-blue)">Feedback!</a> We want improve user experience.
           </p>
 
           <ul class="service-list">
@@ -93,9 +98,9 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
                   </p>
 
                   <a href="#" class="btn-link">
-                    <span class="span">Learn More</span>
+                    <!-- <span class="span">Learn More</span> -->
 
-                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                    <!-- <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon> -->
                   </a>
 
                 </div>
@@ -114,7 +119,7 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
                 <div class="card-content">
 
                   <h3 class="h3">
-                    <a href="papers.php?category=Semester" class="card-title">Endsems Papers</a>
+                    <a href="papers.php?category=Semester" class="card-title">Semester Papers</a>
                   </h3>
 
                   <p class="card-text">
@@ -122,9 +127,9 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
                   </p>
 
                   <a href="#" class="btn-link">
-                    <span class="span">Learn More</span>
+                    <!-- <span class="span">Learn More</span> -->
 
-                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                    <!-- <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon> -->
                   </a>
 
                 </div>
@@ -143,7 +148,7 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
                 <div class="card-content">
 
                   <h3 class="h3">
-                    <a href="papers.php?category=Sessional" class="card-title">Sessionals Papers</a>
+                    <a href="papers.php?category=Sessional" class="card-title">Sessional Papers</a>
                   </h3>
 
                   <p class="card-text">
@@ -151,9 +156,9 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
                   </p>
 
                   <a href="papers.php?category=Sessional" class="btn-link">
-                    <span class="span">Learn More</span>
+                    <!-- <span class="span">Learn More</span> -->
 
-                    <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                    <!-- <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon> -->
                   </a>
 
                 </div>
@@ -164,15 +169,9 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
           </ul>
           <br>
           <div class="hero-content">
-
-            <p class="section-subtitle">or Fetch All paper</p>
-
-            <a href="" class="btn btn-primary">
-              <span class="span">Click here</span>
-
-              <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-            </a>
-
+            <?php
+            require_once "user_papers_table.php";
+            ?>
           </div>
 
         </div>

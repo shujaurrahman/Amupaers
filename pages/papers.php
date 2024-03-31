@@ -7,8 +7,8 @@
     <title>Papers</title>
     <?php require_once "../assets/fonts.php"?>
     <link rel="stylesheet" href="../css/form.css">
-    <link rel="stylesheet" href="../css/filter.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/filter.css">
     <style>
                 .error-text {
             color: #fff;
@@ -103,7 +103,7 @@
                           <div class="error-text"></div>
 
                     <ul class="grid-list" id="papers-container">
-
+                        <p>Nothing selected.</p>
                     </ul>
 
                 </div>

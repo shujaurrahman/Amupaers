@@ -777,7 +777,7 @@ body {
      * spacing
      */
 
-    --section-padding: 120px;
+    --section-padding: 50px;
 
   }
 
@@ -795,7 +795,9 @@ body {
    * HERO
    */
 
-  .hero { overflow: hidden; }
+  .hero { overflow: hidden; 
+  margin-top: 50px !important;
+  }
 
 
 
@@ -916,4 +918,23 @@ body {
   border: 1px solid #f5c6cb;
   max-width: 100%; /* Limit width to 100% of the parent container */
   display: none;
+}
+
+/* Add these styles to your existing stylesheet */
+
+#counter {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.counter-item {
+  font-size: 24px;
+  margin: 10px;
+  display: inline-block;
+  animation: count 2s ease-in-out;
+}
+
+@keyframes count {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

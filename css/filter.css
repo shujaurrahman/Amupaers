@@ -71,4 +71,21 @@
 section {
     padding-block: 30px !important;
 }
-
+/* @media (max-width: 768px)
+{
+    body{
+        min-height: 135vh;
+    }
+} */
+@media (max-width: 768px)
+{
+    body{
+        min-height: 123vh !important;
+    }
+}
+@media (min-width: 990px)
+{
+    body{
+        min-height: 100vh !important;
+    }
+}

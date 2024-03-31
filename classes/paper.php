@@ -188,11 +188,11 @@ class Paper
     }
     
     // Get papers uploaded by a specific user
-    public function getPapersByUser($userId)
+    public function getPapersByUser($email)
     {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE uploaded_by = :userId';
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE uploaded_by = :email';
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':userId', $userId);
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -231,14 +231,15 @@ class Paper
     }
 
     // Get popular papers by views
-    public function getPopularPapersByViews($limit = 10)
+    public function getPopularPapersByViews($limit = 100)
     {
-        $query = 'SELECT * FROM ' . $this->table . ' ORDER BY view_count DESC LIMIT :limit';
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE status = "approved" ORDER BY view_count DESC LIMIT :limit';
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     // Increment view count for a paper
     public function incrementViewCount($paperId)
@@ -407,6 +408,32 @@ public function getPapersByStatus($status) {
 
     // Return the fetched papers
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+public function getTotalCourses()
+{
+    $query = 'SELECT COUNT(DISTINCT course) AS total_courses FROM ' . $this->table;
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row['total_courses'];
+}
+
+public function getTotalDepartments()
+{
+    $query = 'SELECT COUNT(DISTINCT department) AS total_departments FROM ' . $this->table;
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row['total_departments'];
+}
+
+public function getTotalPapers()
+{
+    $query = 'SELECT COUNT(*) AS total_papers FROM ' . $this->table;
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row['total_papers'];
 }
 
 

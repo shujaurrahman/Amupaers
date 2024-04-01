@@ -1,0 +1,11 @@
+actionaction - on delete deletes paper from databse ->for rejected papers
+actionaction-approved can be edited 
+fix userdash table 
+admin navigation to user when loged in as admin
+think how superadmin can be made?
+enabling search functionality
+view tags in searches 
+view tags in related to category in paper
+search by tag 
+show recommended paper when searched a paper below by title recommended by algorithm 
+save search query when not found and report to admin dash report section 

@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: var(--ff-urbanist); /* Changed to use the custom font variable */
+    /* font-family: var(--ff-urbanist);  */
     user-select: none;
 }
 
@@ -13,7 +13,7 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: var(--cultured-1); /* Updated background color */
+    /* background: var(--cultured-1);  */
     padding: 0 10px;
 }
 
@@ -89,7 +89,7 @@ h3 {
     left: 16px;
     top: 10px;
     padding: 0px 5px;
-    background-color: var(--cultured-1);
+    background-color: white;
     color: #adb5bd;
     font-size: 16px;
     transition: 0.3s;

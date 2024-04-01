@@ -71,41 +71,7 @@ class Paper
         printf("Error: %s.\n", $stmt->error);
         return false;
     }
-    
-    // Update paper
-    public function updatePaper()
-    {
-        // Validate status
-        if (!in_array($this->status, ['pending', 'approved', 'rejected'])) {
-            echo "Invalid status. Status must be one of 'pending', 'approved', or 'rejected'.";
-            return false;
-        }
 
-        $query = 'UPDATE ' . $this->table . ' 
-                  SET title = :title, category = :category, department = :department, 
-                      course = :course, subject = :subject, tags = :tags, year = :year, 
-                      file_path = :file_path, uploaded_by = :uploaded_by, status = :status
-                  WHERE id = :id';
-        $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(':title', $this->title);
-        $stmt->bindParam(':category', $this->category);
-        $stmt->bindParam(':department', $this->department);
-        $stmt->bindParam(':course', $this->course);
-        $stmt->bindParam(':subject', $this->subject);
-        $stmt->bindParam(':tags', $this->tags);
-        $stmt->bindParam(':year', $this->year);
-        $stmt->bindParam(':file_path', $this->file_path);
-        $stmt->bindParam(':uploaded_by', $this->uploaded_by);
-        $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':id', $this->id);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-        printf("Error: %s.\n", $stmt->error);
-        return false;
-    }
     public function updatePaperStatus($paper_id, $status) {
         // Validate status
         if (!in_array($status, ['pending', 'approved', 'rejected'])) {
@@ -128,27 +94,100 @@ class Paper
         }
     }
     
-    
-    // Approve paper (update status to 'approved')
-    public function approvePaper()
-    {
-        $this->status = 'approved';
-        return $this->updatePaper(); // Call updatePaper method to apply changes
-    }
+
 
     // Delete paper
-    public function deletePaper()
+    public function deletePaper($paperId)
     {
+        // Fetch file path of the PDF associated with the paper
+        $query = 'SELECT file_path FROM ' . $this->table . ' WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $paperId);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $filePath = $row['file_path'];
+
+        // Delete the paper record from the database
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
         $stmt = $this->conn->prepare($query);
-
-        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':id', $paperId);
 
         if ($stmt->execute()) {
-            return true;
+            // If deletion from the database is successful, delete the associated PDF file
+            if (file_exists($filePath)) {
+                unlink($filePath); // Delete the PDF file
+            }
+            return true; // Return true if deletion is successful
+        } else {
+            // If deletion fails, print error message
+            printf("Error: %s.\n", $stmt->error);
+            return false; // Return false if deletion fails
         }
-        printf("Error: %s.\n", $stmt->error);
-        return false;
+    }
+
+    public function getPaperById($id)
+    {
+        // Create query
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameter
+        $stmt->bindParam(':id', $id);
+
+        // Execute query
+        $stmt->execute();
+
+        // Fetch record
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Set properties
+        $this->id = $row['id'];
+        $this->title = $row['title'];
+        $this->category = $row['category'];
+        $this->department = $row['department'];
+        $this->course = $row['course'];
+        $this->tags = $row['tags'];
+        $this->year = $row['year'];
+        // Set other properties as needed
+
+        return $row; // Return fetched record
+    }
+
+    public function updatePaper()
+    {
+        // Check if all necessary properties are set
+        if (!isset($this->id, $this->title, $this->category, $this->department, $this->course, $this->tags, $this->year, $this->uploaded_by)) {
+            return false;
+        }
+
+        // Query to update paper details without updating PDF file
+        $query = 'UPDATE ' . $this->table . ' 
+                    SET title = :title, category = :category, department = :department, 
+                        course = :course, tags = :tags, year = :year, uploaded_by = :uploaded_by 
+                    WHERE id = :id';
+
+        // Prepare the query
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':category', $this->category);
+        $stmt->bindParam(':department', $this->department);
+        $stmt->bindParam(':course', $this->course);
+        $stmt->bindParam(':tags', $this->tags);
+        $stmt->bindParam(':year', $this->year);
+        $stmt->bindParam(':uploaded_by', $this->uploaded_by);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            return true; // Paper details updated successfully
+        } else {
+            printf("Error: %s.\n", $stmt->error); // Error occurred while updating paper details
+            return false;
+        }
     }
 
     // Get all departments by category

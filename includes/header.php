@@ -21,24 +21,23 @@
           <a href="http://localhost/amupapers/index.php" class="navbar-link" data-nav-toggler>Home</a>
         </li>
         <?php
-                if (strpos($_SERVER['REQUEST_URI'], '/index.php') == true){
-                  echo ' <li class="navbar-item">
+        echo ' <li class="navbar-item">
                   <a href="#about" class="navbar-link" data-nav-toggler>About</a>
                 </li>';
-                }
         ?>
 
-      <?php
-      session_start();
-      if(isset($_SESSION['username'])){
-        echo '        <li class="navbar-item">
+        <?php
+        session_start();
+        if (isset($_SESSION['username'])) {
+          echo '        <li class="navbar-item">
         <a href="http://localhost/amupapers/pages/addpaper.php" class="navbar-link" data-nav-toggler>Add Paper</a>
       </li>';
-      }
-?>
-          <li class="navbar-item">
-            <a href="http://localhost/amupapers/pages/blog.php" class="navbar-link" data-nav-toggler>Blog</a>
-          </li>
+        }
+
+        ?>
+        <li class="navbar-item">
+          <a href="http://localhost/amupapers/pages/blog.php" class="navbar-link" data-nav-toggler>Blog</a>
+        </li>
         <li class="navbar-item">
           <a href="http://localhost/amupapers/pages/contact.php" class="navbar-link" data-nav-toggler>Contact</a>
         </li>
@@ -47,19 +46,34 @@
 
     <div class="header-actions">
       <?php
+      //get current URL
       $current_url = $_SERVER['REQUEST_URI'];
-      if (isset ($_SESSION['username'])) {
+
+      //if admin navigates to homepage our other page of website he will the dashboard button which redirects to admin dash
+      if (isset($_SESSION['role']) && $_SESSION['role'] === 'super admin' || $_SESSION['role'] == 'admin') {
+        echo '<a href="http://localhost/amupapers/admin/adminDashboard.php" class="header-action-btn login-btn">Admin Panel</a>';
+      }
+
+      //Check if the session is set to username via login
+      if (isset($_SESSION['username'])) {
+        
         // If user is logged in
-        if (strpos($current_url, '/pages/dashboard.php') !== false) {
+        if (strpos($current_url, '/pages/dashboard.php') == True) {
+
           // If user is on the dashboard page, display the username
           echo '<a href="http://localhost/amupapers/pages/dashboard.php" class="header-action-btn login-btn">' . $_SESSION['username'] . '</a>';
         } else {
+
           // If user is not on the dashboard page, display "Dashboard"
           echo '<a href="http://localhost/amupapers/pages/dashboard.php" class="header-action-btn login-btn">Dashboard</a>';
+
         }
+
         // Display logout button
         echo '<a href="http://localhost/amupapers/backend/logout.php" class="header-action-btn logout-btn">Logout</a>';
+
       } else {
+
         // If user is not logged in, display login/register button
         echo '<a href="http://localhost/amupapers/pages/login.php" class="header-action-btn login-btn">
             <ion-icon name="person-outline" aria-hidden="true"></ion-icon>

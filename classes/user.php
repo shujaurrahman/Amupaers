@@ -262,78 +262,68 @@ class User
         return $userDetails; // Return user details as an associative array
     }
 
+        // Update user role in the database
+    public function updateUserRole($userId, $newRole) {
+        try {
+            // Prepare SQL statement
+            $query = "UPDATE users SET role = :role WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
 
-    // Update user
-    public function updateUser()
-    {
-        $query = 'UPDATE ' . $this->table . ' 
-                  SET username = :username, password = :password, email = :email, role = :role, registration_date = :registration_date, is_super_admin = :is_super_admin
-                  WHERE id = :id';
-        $stmt = $this->conn->prepare($query);
+            // Bind parameters
+            $stmt->bindParam(':role', $newRole);
+            $stmt->bindParam(':id', $userId);
 
-        $stmt->bindParam(':username', $this->username);
-        $stmt->bindParam(':password', $this->password);
-        $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':role', $this->role);
-        $stmt->bindParam(':registration_date', $this->registration_date);
-        $stmt->bindParam(':is_super_admin', $this->is_super_admin);
-        $stmt->bindParam(':id', $this->id);
-
-        if ($stmt->execute()) {
-            return true;
+            // Execute the query
+            if ($stmt->execute()) {
+                // Role updated successfully
+                return true;
+            } else {
+                // Error occurred while executing the query
+                return false;
+            }
+        } catch (PDOException $e) {
+            // Exception occurred
+            echo "Error: " . $e->getMessage();
+            return false;
         }
-        printf("Error: %s.\n", $stmt->error);
-        return false;
     }
+
+
+    // // Update user
+    // public function updateUser()
+    // {
+    //     $query = 'UPDATE ' . $this->table . ' 
+    //               SET username = :username, password = :password, email = :email, role = :role, registration_date = :registration_date, is_super_admin = :is_super_admin
+    //               WHERE id = :id';
+    //     $stmt = $this->conn->prepare($query);
+
+    //     $stmt->bindParam(':username', $this->username);
+    //     $stmt->bindParam(':password', $this->password);
+    //     $stmt->bindParam(':email', $this->email);
+    //     $stmt->bindParam(':role', $this->role);
+    //     $stmt->bindParam(':registration_date', $this->registration_date);
+    //     $stmt->bindParam(':is_super_admin', $this->is_super_admin);
+    //     $stmt->bindParam(':id', $this->id);
+
+    //     if ($stmt->execute()) {
+    //         return true;
+    //     }
+    //     printf("Error: %s.\n", $stmt->error);
+    //     return false;
+    // }
 
     // Delete user
-    public function deleteUser()
-    {
-        $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $this->id);
-        if ($stmt->execute()) {
-            return true;
-        }
-        printf("Error: %s.\n", $stmt->error);
-        return false;
-    }
-
-    // Update user to admin role
-    public function promoteToAdmin()
-    {
-        $query = 'UPDATE ' . $this->table . ' SET role = :role WHERE id = :id';
-        $stmt = $this->conn->prepare($query);
-
-        $adminRole = 'admin';
-        $stmt->bindParam(':role', $adminRole);
-        $stmt->bindParam(':id', $this->id);
-
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            printf("Error: %s.\n", $stmt->error);
-            return false;
-        }
-    }
-
-    // Downgrade admin to user role
-    public function demoteToUser()
-    {
-        $query = 'UPDATE ' . $this->table . ' SET role = :role WHERE id = :id';
-        $stmt = $this->conn->prepare($query);
-
-        $userRole = 'user';
-        $stmt->bindParam(':role', $userRole);
-        $stmt->bindParam(':id', $this->id);
-
-        if ($stmt->execute()) {
-            return true;
-        } else {
-            printf("Error: %s.\n", $stmt->error);
-            return false;
-        }
-    }
+    // public function deleteUser()
+    // {
+    //     $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
+    //     $stmt = $this->conn->prepare($query);
+    //     $stmt->bindParam(':id', $this->id);
+    //     if ($stmt->execute()) {
+    //         return true;
+    //     }
+    //     printf("Error: %s.\n", $stmt->error);
+    //     return false;
+    // }
 }
 
 ?>

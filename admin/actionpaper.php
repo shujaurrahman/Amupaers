@@ -51,7 +51,7 @@ $papers = $paper->getAllPapers();
 
         td,
         th {
-            padding-left: 10px !important;
+            padding-left: 40px !important;
 
         }
 
@@ -100,7 +100,7 @@ $papers = $paper->getAllPapers();
             border: 1px solid #f5c6cb;
             margin-bottom: 20px;
             display: none;
-            width: 50rem;
+            width: 45rem;
         }
     </style>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
@@ -119,7 +119,15 @@ $papers = $paper->getAllPapers();
         </div>
 
         <div class="container-fluid p-0">
-            <p class="copyright" style="padding:20px 30px;">Click on button to fetch paper data.</p>
+        <p class="copyright" style="padding: 20px 30px; line-height: 1.5;">
+    Icon and what they do:<br>
+    <ion-icon name='checkmark-circle' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Approve &nbsp;
+    <ion-icon name='close' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Reject &nbsp;&nbsp;&nbsp;
+    <ion-icon name='create' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Edit &nbsp;&nbsp;&nbsp;
+    <ion-icon name='trash' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Delete &nbsp;&nbsp;&nbsp;
+</p>
+
+
             <div class="error-text"></div>
 
             <div class="row">
@@ -160,11 +168,15 @@ $papers = $paper->getAllPapers();
         xhr.open("GET", `../backend/fetch_papers_by_status.php?status=${status}`, true);
         xhr.onload = function () {
             if (xhr.status >= 200 && xhr.status < 300) {
-                // Request was successful
                 // Parse the response as JSON
                 const papers = JSON.parse(xhr.responseText);
+                if (papers && papers.message) {
+                    displayMessage(papers.message);
+                    }
+
                 // Update the table with the fetched papers
                 updateTable(papers);
+
             } else {
                 // Error handling
                 console.error("Request failed:", xhr.statusText);
@@ -179,7 +191,7 @@ $papers = $paper->getAllPapers();
 
     function updateTable(papers) {
         const tbody = document.querySelector("tbody");
-        tbody.innerHTML = ""; // Clear existing table rows
+        tbody.innerHTML = ""; 
         // Loop through the fetched papers and create table rows
         papers.forEach(function (paper) {
             const tr = document.createElement("tr");
@@ -198,20 +210,59 @@ $papers = $paper->getAllPapers();
             tbody.appendChild(tr);
         });
     }
-
-    // Function to get the appropriate action icon based on paper status
     function getActionIcon(status, paperId) {
-        switch (status) {
-            case 'pending':
-                return `<span class='ion-icon-container' onclick='updateStatus("${paperId}", "approved")'><ion-icon name='checkmark-circle' size='large' ></ion-icon></span><span class='ion-icon-container' onclick='updateStatus("${paperId}", "rejected")'><ion-icon name='close' size='large'></ion-icon></span>`;
-            case 'approved':
-                return `<span class='ion-icon-container'><ion-icon name='create' size='large'></ion-icon></span><span class='ion-icon-container'><ion-icon name='trash' size='large' onclick='updateStatus("${paperId}", "rejected")'></ion-icon></span>`;
-            case 'rejected':
-                return `<span class='ion-icon-container'><ion-icon name='trash' size='large'></ion-icon></span>`;
-            default:
-                return '';
-        }
+    switch (status) {
+        case 'pending':
+            return `<span class='ion-icon-container' onclick='updateStatus("${paperId}", "approved")'><ion-icon name='checkmark-circle' size='large' ></ion-icon></span>
+            <span class='ion-icon-container' onclick='updateStatus("${paperId}", "rejected")'><ion-icon name='close' size='large'></ion-icon></span>
+            <span class='ion-icon-container' onclick='editPaper("${paperId}")'><ion-icon name='create' size='large'></ion-icon></span>`;
+        case 'approved':
+            return `<span class='ion-icon-container' onclick='editPaper("${paperId}")'><ion-icon name='create' size='large'></ion-icon></span>
+            <span class='ion-icon-container' onclick='updateStatus("${paperId}", "rejected")'><ion-icon name='close' size='large'></ion-icon></span>
+            <span class='ion-icon-container' onclick='deletePaper("${paperId}")'><ion-icon name='trash' size='large'></ion-icon></span>`;
+        case 'rejected':
+            return `<span class='ion-icon-container' onclick='deletePaper("${paperId}")'><ion-icon name='trash' size='large'></ion-icon></span>
+            <span class='ion-icon-container' onclick='updateStatus("${paperId}", "approved")'><ion-icon name='checkmark-circle' size='large' ></ion-icon></span>`;
+        default:
+            return '';
     }
+}
+
+function editPaper(paperId) {
+    // Redirect to the edit paper page with the paper ID
+    window.location.href = `edit_page.php?paper_id=${paperId}`;
+}
+
+function deletePaper(paperId) {
+    if (confirm('Are you sure you want to delete this paper?')) {
+        // Send AJAX request to delete the paper
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `../backend/delete_paper.php?paper_id=${paperId}`, true);
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    // Display success message
+                    displayMessage(response.message);
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 4000); 
+                } else {
+                    console.error("Error deleting paper:", response.error);
+                }
+            } else {
+                // Error handling
+                console.error("Request failed:", xhr.statusText);
+            }
+        };
+        xhr.onerror = function () {
+            // Error handling
+            console.error("Request failed.");
+        };
+        xhr.send();
+    }
+}
 
     // Function to update paper status
     function updateStatus(paperId, newStatus) {
@@ -251,9 +302,9 @@ $papers = $paper->getAllPapers();
     function displayMessage(message) {
         const errorText = document.querySelector('.error-text');
         errorText.innerText = message;
-        errorText.style.display = 'block'; // Make the error text visible
+        errorText.style.display = 'block'; 
         setTimeout(function () {
-            errorText.style.display = 'none'; // Hide the error text after 5 seconds
+            errorText.style.display = 'none'; 
         }, 5000);
     }
 

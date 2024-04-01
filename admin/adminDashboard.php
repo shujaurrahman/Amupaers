@@ -44,6 +44,12 @@ if ($stmt->rowCount() > 0) {
                 border: 2px solid !important;
                 border-color: var(--green) !important ;
             }
+            a:hover{
+                color:var(--ultramarine-blue);
+            }
+            .login-btn:is(:hover, :focus){
+                color: white;
+            }
         </style>
         <?php require_once "../assets/fonts.php"; ?>
     </head>
@@ -78,11 +84,11 @@ if ($stmt->rowCount() > 0) {
                                     echo "<tr>";
                                     echo "<td>{$row['id']}</td>";
                                     echo "<td>{$row['username']}</td>";
-                                    echo "<td>{$row['role']}</td>";
+                                    echo "<td id='rolecolumn-{$row['id']}'>{$row['role']}</td>";
                                     echo "<td>{$row['email']}</td>";
                                     // Check if the user is a superadmin
                                     if ($row['role'] == 'super_admin') {
-                                        echo "<td>No Verification Required</td>";
+                                        echo "<td><span class='badge bg-dark'>Super admin</span>";
                                     } else {
                                         // Display verification status for non-superadmin users
                                         echo "<td>";
@@ -98,13 +104,16 @@ if ($stmt->rowCount() > 0) {
                                     $registrationDate = date('d F Y', strtotime($row['registration_date']));
                                     echo "<td>{$registrationDate}</td>";
                                     // Display the dropdown menu for superadmins
-                                    if ($isSuperAdmin) {
+                                    if ($isSuperAdmin && $row['code'] == 0 && $row['role'] != 'super_admin') {
                                         echo "<td>";
-                                        echo "<select class='form-select'>";
-                                        echo "<option value='user'>User</option>";
-                                        echo "<option value='admin'>Admin</option>";
+                                        echo "<select class='form-select role-dropdown' data-user-id='{$row['id']}'>";
+                                        echo "<option value='user' " . ($row['role'] == 'user' ? 'selected' : '') . ">User</option>";
+                                        echo "<option value='admin' " . ($row['role'] == 'admin' ? 'selected' : '') . ">Admin</option>";
                                         echo "</select>";
                                         echo "</td>";
+                                    } else {
+                                        // If conditions not met, display an empty cell
+                                        echo "<td></td>";
                                     }
                                     echo "</tr>";
                                 }
@@ -117,6 +126,51 @@ if ($stmt->rowCount() > 0) {
             </div>
         </div>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Select all dropdowns with class 'role-dropdown'
+        let roleDropdowns = document.querySelectorAll('.role-dropdown');
+
+        // Add event listener for change event to each dropdown
+        roleDropdowns.forEach(function(dropdown) {
+            dropdown.addEventListener('change', function() {
+                // Get the selected value (new role)
+                let newRole = this.value;
+
+                // Get the user's ID from the 'data-user-id' attribute
+                let userId = this.getAttribute('data-user-id');
+
+                // Send asynchronous request to update user's role
+                fetch(`../backend/updateUserRole.php?userId=${userId}&newRole=${newRole}`, {
+                    method: 'GET'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle success response
+                    console.log(data);
+                    // Find the <td> element containing the role and update its text content
+                    let roleCell = document.querySelector(`#rolecolumn-${userId}`);
+                    if (roleCell) {
+                        roleCell.textContent = newRole; // Update role text content
+                    }
+                })
+                .catch(error => {
+                    // Handle error
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+            });
+        });
+    });
+
+
+</script>
+
+
     </body>
     </html>
     <?php

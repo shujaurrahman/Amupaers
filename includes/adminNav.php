@@ -47,6 +47,8 @@
           // If user is not on the dashboard page, display "Dashboard"
           echo '<a href="http://localhost/amupapers/admin/adminDashboard.php" class="header-action-btn login-btn">Dashboard</a>';
         }
+        //redirection to user panel
+        echo '<a href="http://localhost/amupapers/pages/dashboard.php" class="header-action-btn login-btn">User Dashboard</a>';
         // Display logout button
         echo '<a href="http://localhost/amupapers/backend/logout.php" class="header-action-btn logout-btn">Logout</a>';
       } 

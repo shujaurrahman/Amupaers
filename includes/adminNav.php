@@ -3,13 +3,13 @@
     <div class="container">
 
       <h1>
-        <a href="#" class="logo">AmuPapers</a>
+        <a href="http://localhost/amupapers/index.php" class="logo">AmuPapers</a>
       </h1>
 
       <nav class="navbar" data-navbar>
 
         <div class="navbar-top">
-          <a href="#" class="logo">AmuPapers</a>
+          <a href="http://localhost/amupapers/index.php" class="logo">AmuPapers</a>
 
           <button class="nav-close-btn" aria-label="Close menu" data-nav-toggler>
             <ion-icon name="close-outline"></ion-icon>

@@ -1,4 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+<script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+<link rel="stylesheet" href="../css/style.css">
+<?php require_once "../assets/fonts.php";
+    //   require_once "../backend/error.php";
+      require_once "../classes/paper.php";
+      require_once "../classes/database.php";
+?>
+<style>
+          :root{
+        --section-padding: 50px !important;
+    }
+</style>
+</head>
+<body>
 <?php
+  require_once "../includes/header.php";
+
+session_start();
+
+// Check if the user is not logged in, then redirect them to the login page
+if (!isset($_SESSION['username'])) {
+    header("Location: http://localhost/amupapers/pages/login.php");
+    exit();
+}
+
+$name=$_SESSION['username'];
+$email=$_SESSION['email'];
 echo "<style>tr{
     border: 2px solid !important;
     border-color: var(--green) !important ;
@@ -47,7 +80,11 @@ border: 1px solid #f5c6cb;
 margin-bottom: 20px;
 display: none;
 width: 50rem;
-}</style>";
+}
+.container-fluid{
+    padding-top:100px !important;;
+}
+</style>";
 
 // Initialize Database connection
 $database = new Database();
@@ -62,8 +99,8 @@ if (!empty($papers)){
 ?>
 
     <div class="container">
-        <h1 class="h3 mb-3" style="padding:20px 30px">Uploaded by you</h1>
         <div class="container-fluid p-0">
+            <h1 class="h3 mb-3" style="padding:20px 30px">Uploaded by you</h1>
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card">
@@ -71,8 +108,6 @@ if (!empty($papers)){
                             <table class="table table-striped" style="width:100%">
                                 <thead>
                                 <tr>
-                                    <!-- <th>Title</th> -->
-                                    
                                     <th>Category</th>
                                     <th>Department</th>
                                     <th>Course</th>
@@ -92,7 +127,6 @@ if (!empty($papers)){
                                         $msgStatus="<p style='font-size:13px'> {$paper['course']} {$paper['year']} of {$paper['department']} Department  upload {$paper['status']} reason: ".$paper['subject']."</p>";
                                     }
                                     echo "<tr>";
-                                    // echo "<td>{$paper['title']}</td>";
                                     echo "<td>{$paper['category']}</td>";
                                     echo "<td>{$paper['department']}</td>";
                                     echo "<td>{$paper['course']}</td>";
@@ -113,5 +147,9 @@ if (!empty($papers)){
         </div>
     </div>
     <?php
+}else{
+    echo "<div class='container'><div class='container-fluid p-0'><h3 style='padding-top:50px'>No paper yet uploaded by you.</h3></div></div>";
 }
 ?>
+</body>
+</html>

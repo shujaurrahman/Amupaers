@@ -10,6 +10,7 @@ if (!isset($_SESSION['username'])) {
 $name=$_SESSION['username'];
 $email=$_SESSION['email'];
 // $email="shuja";
+
 // Check if a password change message is set in the session
 if (isset($_SESSION['msg'])) {
     $msg = "Your password was changed";
@@ -37,8 +38,7 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
   unset($_SESSION['tk']);
 }
   // require_once "../backend/error.php";
-  require_once "../classes/paper.php";
-  require_once "../classes/database.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -47,8 +47,8 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <!-- <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'> -->
-    <!-- <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script> -->
+
+
     <link rel="stylesheet" href="../css/style.css">
     <?php require_once "../assets/fonts.php"?>
     <style>
@@ -97,12 +97,6 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
                     
                   </p>
 
-                  <a href="#" class="btn-link">
-                    <!-- <span class="span">Learn More</span> -->
-
-                    <!-- <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon> -->
-                  </a>
-
                 </div>
 
               </div>
@@ -125,12 +119,6 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
                   <p class="card-text">
              
                   </p>
-
-                  <a href="#" class="btn-link">
-                    <!-- <span class="span">Learn More</span> -->
-
-                    <!-- <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon> -->
-                  </a>
 
                 </div>
 
@@ -155,12 +143,6 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
             
                   </p>
 
-                  <a href="papers.php?category=Sessional" class="btn-link">
-                    <!-- <span class="span">Learn More</span> -->
-
-                    <!-- <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon> -->
-                  </a>
-
                 </div>
 
               </div>
@@ -168,10 +150,28 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
 
           </ul>
           <br>
+<?php
+      require_once "../classes/paper.php";
+      require_once "../classes/database.php";
+$database = new Database();
+$conn = $database->getConnection();
+
+// Initialize User object
+$paper = new Paper($conn);
+
+// Fetch all users
+$papers = $paper->getPapersByUser($email);
+if (!empty($papers)){
+
+?>
           <div class="hero-content">
-            <?php
-            require_once "user_papers_table.php";
-            ?>
+          <a href="user_papers_table.php" class="btn btn-primary" style="    min-height: 0; padding: 7px 12px;gap: 0px;font-weight:var(--fw-500); margin-top:20px !important;">
+            <span class="span">Your Uploads</span>
+            <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+          </a>
+<?php
+}
+?>
           </div>
 
         </div>

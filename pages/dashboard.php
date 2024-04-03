@@ -37,7 +37,15 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
   unset($_SESSION['p_success']);
   unset($_SESSION['tk']);
 }
-  // require_once "../backend/error.php";
+require_once "../classes/database.php";
+require_once "../classes/paper.php";
+require_once "../classes/user.php";
+// update session code to verified 
+$database = new Database();
+$conn = $database->getConnection();
+$user=new User($conn);
+$userDetails = $user->getUserDetailsByEmail($email);
+$_SESSION['code']=$userDetails['code'];
 
 ?>
 
@@ -151,10 +159,7 @@ if (isset($_SESSION['p_success']) && isset($_SESSION['p_name'])&& isset($_SESSIO
           </ul>
           <br>
 <?php
-      require_once "../classes/paper.php";
-      require_once "../classes/database.php";
-$database = new Database();
-$conn = $database->getConnection();
+
 
 // Initialize User object
 $paper = new Paper($conn);

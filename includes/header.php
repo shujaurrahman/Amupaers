@@ -1,3 +1,11 @@
+<?php
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+session_start();
+
+?>
+
+
 <header class="header" data-header>
   <div class="container">
 
@@ -20,16 +28,16 @@
         <li class="navbar-item">
           <a href="http://localhost/amupapers/index.php" class="navbar-link" data-nav-toggler>Home</a>
         </li>
+
         <?php
         echo ' <li class="navbar-item">
-                  <a href="#about" class="navbar-link" data-nav-toggler>About</a>
+                  <a href="http://localhost/amupapers/pages/about.php" class="navbar-link" data-nav-toggler>About</a>
                 </li>';
         ?>
 
         <?php
-        session_start();
         if (isset($_SESSION['username'])) {
-          echo '        <li class="navbar-item">
+          echo '<li class="navbar-item">
         <a href="http://localhost/amupapers/pages/addpaper.php" class="navbar-link" data-nav-toggler>Add Paper</a>
       </li>';
         }
@@ -49,14 +57,14 @@
       //get current URL
       $current_url = $_SERVER['REQUEST_URI'];
 
-      //if admin navigates to homepage our other page of website he will the dashboard button which redirects to admin dash
+      //if admin navigates to homepage our other page of website ,will the dashboard button which redirects to admin dash
       if (isset($_SESSION['role']) && $_SESSION['role'] === 'super admin' || $_SESSION['role'] == 'admin') {
         echo '<a href="http://localhost/amupapers/admin/adminDashboard.php" class="header-action-btn login-btn">Admin Panel</a>';
       }
 
       //Check if the session is set to username via login
-      if (isset($_SESSION['username'])) {
-        
+      if (isset($_SESSION['username']) && $_SESSION['code']==0) {
+
         // If user is logged in
         if (strpos($current_url, '/pages/dashboard.php') == True) {
 

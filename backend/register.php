@@ -49,6 +49,8 @@ if (isset($_POST['fname'], $_POST['lname'], $_POST['email'], $_POST['password'])
                 // Set email and username in session
                 $_SESSION['email'] = $email;
                 $_SESSION['username'] = $user->username;
+                $userDetails = $user->getUserDetailsByEmail($email);
+                $_SESSION['code']=$userDetails['code'];
 
                 $subject = 'Email Verification Code';
                 $msg = 'Thank you for registering. Your verification code is:';

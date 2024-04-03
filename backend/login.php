@@ -59,6 +59,7 @@ if (isset ($_POST['email'], $_POST['password'])) {
                 $_SESSION['username'] = $loggedInUser['username'];
                 $_SESSION['wlcm-bck']="wc";
                 $_SESSION['role']=""; 
+                
                     // Check if the user is a superadmin
                         if ($loggedInUser['role'] == 'super_admin') {
                             // Set additional session data for superadmin

@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         isset($_POST['paper_id'])
     ) {
         // Include the necessary files and initialize the database connection
+        require_once "../backend/error.php";
         require_once "../classes/paper.php";
         require_once "../classes/database.php";
 
@@ -41,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $adminEmail = $_SESSION['email'];
 
         // Concatenate "uploaded by" user email and "updated by" admin email
-        $paper->uploaded_by = $_POST['uploaded_by'] . " \n [updated by: " . $adminEmail."]";
+        $paper->updated_by ="updated by: ".$adminEmail;
 
         // Attempt to update the paper details
         if ($paper->updatePaper()) {

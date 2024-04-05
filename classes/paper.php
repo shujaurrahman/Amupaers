@@ -19,6 +19,8 @@ class Paper
     public $upload_date;
     public $status='pending';
 
+    public $updated_by;
+
     public function __construct($db)
     {
         $this->conn = $db;
@@ -158,14 +160,14 @@ class Paper
     public function updatePaper()
     {
         // Check if all necessary properties are set
-        if (!isset($this->id, $this->title, $this->category, $this->department, $this->course, $this->tags, $this->year, $this->uploaded_by)) {
+        if (!isset($this->id, $this->title, $this->category, $this->department, $this->course, $this->tags, $this->year, $this->updated_by)) {
             return false;
         }
 
         // Query to update paper details without updating PDF file
         $query = 'UPDATE ' . $this->table . ' 
                     SET title = :title, category = :category, department = :department, 
-                        course = :course, tags = :tags, year = :year, uploaded_by = :uploaded_by 
+                        course = :course, tags = :tags, year = :year, updated_by = :updated_by 
                     WHERE id = :id';
 
         // Prepare the query
@@ -179,11 +181,38 @@ class Paper
         $stmt->bindParam(':course', $this->course);
         $stmt->bindParam(':tags', $this->tags);
         $stmt->bindParam(':year', $this->year);
-        $stmt->bindParam(':uploaded_by', $this->uploaded_by);
+        $stmt->bindParam(':updated_by', $this->updated_by);
 
         // Execute the query
         if ($stmt->execute()) {
             return true; // Paper details updated successfully
+        } else {
+            printf("Error: %s.\n", $stmt->error); // Error occurred while updating paper details
+            return false;
+        }
+    }
+    public function updateReason()
+    {
+        // Check if all necessary properties are set
+        if (!isset($this->id, $this->subject)) {
+            return false;
+        }
+
+        // Query to update paper details without updating PDF file
+        $query = 'UPDATE ' . $this->table . ' 
+                    SET subject = :subject
+                    WHERE id = :id';
+
+        // Prepare the query
+        $stmt = $this->conn->prepare($query);
+
+        // Bind parameters
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':subject', $this->subject);
+
+        // Execute the query
+        if ($stmt->execute()) {
+            return true; 
         } else {
             printf("Error: %s.\n", $stmt->error); // Error occurred while updating paper details
             return false;

@@ -123,8 +123,9 @@ $papers = $paper->getAllPapers();
     Icon and what they do:<br>
     <ion-icon name='checkmark-circle' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Approve &nbsp;
     <ion-icon name='close' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Reject &nbsp;&nbsp;&nbsp;
-    <ion-icon name='create' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Edit &nbsp;&nbsp;&nbsp;
     <ion-icon name='trash' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Delete &nbsp;&nbsp;&nbsp;
+    <ion-icon name='create' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Edit &nbsp;&nbsp;&nbsp;
+    <ion-icon name='pencil' size='small' style="vertical-align: middle; display: inline-block;"></ion-icon> Reason for Rejecting &nbsp;&nbsp;&nbsp;
 </p>
 
 
@@ -193,6 +194,7 @@ $papers = $paper->getAllPapers();
         const tbody = document.querySelector("tbody");
         tbody.innerHTML = ""; 
         // Loop through the fetched papers and create table rows
+        
         papers.forEach(function (paper) {
             const tr = document.createElement("tr");
             tr.innerHTML = `
@@ -203,8 +205,8 @@ $papers = $paper->getAllPapers();
                 <td>${paper.course}</td>
                 <td><span class='ion-icon-container'><a href="${paper.file_path}" target="_blank"><ion-icon name='eye' size='large'></ion-icon></a></span></td>
                 <td>${paper.year}</td>
-                <td>${paper.upload_date}</td>
-                <td>${paper.uploaded_by}</td>
+                <td>${paper.upload_date} </td>
+                <td>${paper.uploaded_by} </td>
                 <td>${getActionIcon(paper.status, paper.id)}</td>
             `;
             tbody.appendChild(tr);
@@ -222,7 +224,8 @@ $papers = $paper->getAllPapers();
             <span class='ion-icon-container' onclick='deletePaper("${paperId}")'><ion-icon name='trash' size='large'></ion-icon></span>`;
         case 'rejected':
             return `<span class='ion-icon-container' onclick='deletePaper("${paperId}")'><ion-icon name='trash' size='large'></ion-icon></span>
-            <span class='ion-icon-container' onclick='updateStatus("${paperId}", "approved")'><ion-icon name='checkmark-circle' size='large' ></ion-icon></span>`;
+            <span class='ion-icon-container' onclick='updateStatus("${paperId}", "approved")'><ion-icon name='checkmark-circle' size='large' ></ion-icon></span>
+            <span class='ion-icon-container' onclick='updateReason("${paperId}")'><ion-icon name='pencil' size='large' ></ion-icon></span>`;
         default:
             return '';
     }
@@ -231,6 +234,10 @@ $papers = $paper->getAllPapers();
 function editPaper(paperId) {
     // Redirect to the edit paper page with the paper ID
     window.location.href = `edit_page.php?paper_id=${paperId}`;
+}
+function updateReason(paperId) {
+    // Redirect to the edit paper page with the paper ID
+    window.location.href = `update_reason.php?paper_id=${paperId}`;
 }
 
 function deletePaper(paperId) {
@@ -305,7 +312,7 @@ function deletePaper(paperId) {
         errorText.style.display = 'block'; 
         setTimeout(function () {
             errorText.style.display = 'none'; 
-        }, 5000);
+        }, 2000);
     }
 
 

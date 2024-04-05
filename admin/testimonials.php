@@ -81,7 +81,7 @@ $stmt->execute();
           <?php
         }
       } else {
-        echo "<p>No testimonials found.</p>";
+        echo "<p>No Querries found.</p>";
       }
       ?>
     </div>

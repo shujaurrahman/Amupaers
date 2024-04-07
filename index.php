@@ -41,7 +41,7 @@
 
       <!-- Popular Papers Section -->
       <section class="section category" aria-label="category">
-        <div class="container">
+        <div class="container"> 
           <p class="section-subtitle">Unlock Wisdom</p>
           <h2 class="h2 section-title">Popular Papers</h2>
           <ul class="grid-list">

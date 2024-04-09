@@ -1,10 +1,15 @@
+<style>
+  .form-control:focus {
+  outline-color: var(--ultramarine-blue);
+}
+
+</style>
 <?php
 // error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 session_start();
 
 ?>
-
 
 <header class="header" data-header>
   <div class="container">
@@ -43,11 +48,15 @@ session_start();
         }
 
         ?>
-        <li class="navbar-item">
+        <!-- <li class="navbar-item">
           <a href="http://localhost/amupapers/pages/blog.php" class="navbar-link" data-nav-toggler>Blog</a>
-        </li>
+        </li> -->
         <li class="navbar-item">
           <a href="http://localhost/amupapers/pages/contact.php" class="navbar-link" data-nav-toggler>Contact</a>
+        </li>
+        <li>
+            <a href="http://localhost/amupapers/pages/search.php" class="navbar-link" data-nav-toggler>Search</a>
+  
         </li>
       </ul>
     </nav>
@@ -63,7 +72,7 @@ session_start();
       }
 
       //Check if the session is set to username via login
-      if (isset($_SESSION['username']) && $_SESSION['code']==0) {
+      if (isset($_SESSION['username']) && $_SESSION['code'] == 0) {
 
         // If user is logged in
         if (strpos($current_url, '/pages/dashboard.php') == True) {
@@ -100,4 +109,5 @@ session_start();
 
   </div>
   <script src="http://localhost/amupapers/js/script.js" defer></script>
+  <script src="https://kit.fontawesome.com/d2c748c9a0.js" crossorigin="anonymous"></script>
 </header>

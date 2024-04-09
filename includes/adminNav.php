@@ -29,7 +29,7 @@
           <li class="navbar-item">
             <a href="http://localhost/amupapers/admin/testimonials.php" class="navbar-link" data-nav-toggler>Querries</a>
           </li>
-
+          
         </ul>
 
       </nav>
@@ -39,6 +39,8 @@
       session_start();
       $current_url = $_SERVER['REQUEST_URI'];
       if (isset ($_SESSION['username'])) {
+        //redirection to user panel
+        echo '<a href="http://localhost/amupapers/pages/dashboard.php" class="header-action-btn login-btn">User Dashboard</a>';
         // If user is logged in
         if (strpos($current_url, '/admin/adminDashboard.php') !== false) {
           // If user is on the dashboard page, display the username
@@ -47,8 +49,6 @@
           // If user is not on the dashboard page, display "Dashboard"
           echo '<a href="http://localhost/amupapers/admin/adminDashboard.php" class="header-action-btn login-btn">Dashboard</a>';
         }
-        //redirection to user panel
-        echo '<a href="http://localhost/amupapers/pages/dashboard.php" class="header-action-btn login-btn">User Dashboard</a>';
         // Display logout button
         echo '<a href="http://localhost/amupapers/backend/logout.php" class="header-action-btn logout-btn">Logout</a>';
       } 

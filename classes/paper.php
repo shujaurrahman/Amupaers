@@ -268,25 +268,70 @@ class Paper
     // Search papers by title
     public function searchPapers($keyword)
     {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE title LIKE :keyword';
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE 
+                  title LIKE :keyword OR 
+                  course LIKE :keyword OR 
+                  department LIKE :keyword OR 
+                  category LIKE :keyword OR 
+                  uploaded_by LIKE :keyword OR 
+                  year LIKE :keyword OR 
+                  tags LIKE :keyword';
         $stmt = $this->conn->prepare($query);
         $keyword = '%' . $keyword . '%'; // Add wildcards for partial matching
         $stmt->bindParam(':keyword', $keyword);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-
+    
+    public function getAllTags()
+    {
+        $query = 'SELECT tags FROM ' . $this->table;
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    
+        // Create an array to store unique tags
+        $uniqueTags = array();
+    
+        // Loop through each row and extract tags
+        foreach ($tags as $tagsString) {
+            // Split tags by comma
+            $tagsArray = explode(',', $tagsString);
+            
+            // Trim and add each tag to uniqueTags array
+            foreach ($tagsArray as $tag) {
+                $tag = trim($tag);
+                // Convert tag to lowercase for case-insensitive comparison
+                $tagLower = strtolower($tag);
+                if (!empty($tag) && !in_array($tagLower, $uniqueTags)) {
+                    $uniqueTags[] = $tagLower;
+                }
+            }
+        }
+    
+        return $uniqueTags;
+    }
+    
+    
     // Get papers by tag
     public function getPapersByTag($tag)
     {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE tags LIKE :tag';
+        // Convert tag to lowercase for case insensitivity
+        $tagLower = strtolower($tag);
+    
+        // Add wildcard characters for partial matching
+        $tagWildcard = '%' . $tagLower . '%';
+    
+        $query = 'SELECT * FROM ' . $this->table . ' WHERE LOWER(tags) LIKE :tagLower OR LOWER(tags) LIKE :tagWildcard';
         $stmt = $this->conn->prepare($query);
-        $tag = '%' . $tag . '%'; // Add wildcards for partial matching
-        $stmt->bindParam(':tag', $tag);
+        $stmt->bindParam(':tagLower', $tagLower);
+        $stmt->bindParam(':tagWildcard', $tagWildcard);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $papers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        return $papers;
     }
+    
     // Search papers by tag
     public function searchPapersByTag($tag)
     {

@@ -14,6 +14,18 @@
       font-size: 12px; /* Adjust the font size as needed */
       margin: 0;
     }
+    .btn {
+    min-height: 48px;
+    max-width: max-content;
+    font-size: var(--fs-5);
+    font-weight: var(--fw-700);
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 8px 14px;
+    border-radius: var(--radius-6);
+    transition: var(--transition-1);
+}
   </style>
 </head>
 

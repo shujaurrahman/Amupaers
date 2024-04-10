@@ -82,7 +82,7 @@ $_SESSION['code']=$userDetails['code'];
           <h2 class="h2 section-title">Select Category</h2>
 
           <p class="section-text">
-            Continue with category and select department & course, get papers of specific choice.<br> Don't forget to give your genuine <a href="mailto:shujaurrehman210@gmail.com" style="color:var(--ultramarine-blue)">Feedback!</a> We want improve user experience.
+          Continue by exploring categories and selecting departments & courses to find papers tailored to your interests.<br> Don't forget to provide your genuine <a href="mailto:shujaurrehman210@gmail.com" style="color:var(--ultramarine-blue)">feedback</a>! Your insights help us enhance the user experience.
           </p>
 
           <ul class="service-list">
@@ -170,7 +170,7 @@ if (!empty($papers)){
 
 ?>
           <div class="hero-content">
-          <a href="user_papers_table.php" class="btn btn-primary" style="    min-height: 0; padding: 7px 12px;gap: 0px;font-weight:var(--fw-500); margin-top:20px !important;">
+          <a href="user_papers_table.php" class="btn btn-primary" style="min-height: 0; padding: 7px 12px;gap: 0px;font-weight:var(--fw-500); margin-top:20px !important;">
             <span class="span">Your Uploads</span>
             <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
           </a>

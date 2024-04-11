@@ -9,6 +9,7 @@
   <?php require_once "../assets/fonts.php"?>
   <!-- custom css link -->
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/form.css">
   <style>
     .small {
     font-size: 12px; /* Adjust the font size as needed */
@@ -16,7 +17,22 @@
     
 }
 .section{
-    padding-top: 110px;
+    padding-top: 20px;
+}
+body{
+    min-height: 120vh;
+}
+.btn {
+    min-height: 48px;
+    max-width: max-content;
+    font-size: var(--fs-4);
+    font-weight: var(--fw-500);
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    padding: 8px 14px;
+    border-radius: var(--radius-6);
+    transition: var(--transition-1);
 }
   </style>
 </head>
@@ -44,21 +60,20 @@
             // Fetch popular papers
             $papers = $paper->getPopularPapersByViews(15);
 
-            // Check if there are any popular papers
             if (!empty($papers)) {
-                foreach ($papers as $papers) {
-                  $uploadDate = date("F j, Y", strtotime($papers['upload_date']));
+                foreach ($papers as $paper) {
+                  $uploadDate = date("F j, Y", strtotime($paper['upload_date']));
                       echo "<li>
-                      <div class='category-card'  onclick='openPDF(\"{$papers['file_path']}\", {$papers['id']})' title='Click to view paper'>
+                      <div class='category-card'  onclick='openPDF(\"{$paper['file_path']}\", {$paper['id']})' title='Click to view paper'>
                         <div>
                             <h3 class='h3 card-title'>
-                                <a href='#'>{$papers['title']}</a>
+                                <a href='#'>{$paper['title']}</a>
                             </h3>
-                            <span class='card-meta '>{$papers['department']} DEPARTMENT </span><br>
-                            <span class='card-meta small'>{$papers['course']}</span> <br>
-                            <span class='card-meta small'>{$papers['category']} paper of year {$papers['year']}</span><br>
+                            <span class='card-meta '>{$paper['department']} DEPARTMENT </span><br>
+                            <span class='card-meta small'>{$paper['course']}</span> <br>
+                            <span class='card-meta small'>{$paper['category']} paper of year {$paper['year']}</span><br>
                             <span class='card-meta small'>Added {$uploadDate} |</span> 
-                            <span class='card-meta small'>Views: {$papers['view_count']}</span><br>
+                            <span class='card-meta small'>Views: {$paper['view_count']}</span><br>
                            
                             
                         </div>
@@ -73,6 +88,10 @@
             ?>
             
           </ul>
+          <a href="login.php" class="btn btn-primary" style="margin-top:20px !important;">
+            <span class="span">Login to view all</span>
+            <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+          </a>
     </div>
 </section>
 
@@ -107,6 +126,7 @@
     }
 
     </script>
+    <script src="../js/script.js" defer></script>
 </body>
 
 </html>

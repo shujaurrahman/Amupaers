@@ -305,12 +305,6 @@ function updatePapersUI(papers) {
         papersContainer.appendChild(li);
     });
 }
-
 </script>
-
-
-    
-
 </body>
-
 </html>

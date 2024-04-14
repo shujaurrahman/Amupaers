@@ -1,0 +1,112 @@
+body {
+    min-height: 115vh;
+}
+.all-tags {
+    margin-top: 10px;
+}
+
+.all-tags h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.tag-list {
+    list-style: none;
+    padding: 0;
+}
+
+.tag-list li {
+    display: inline-block;
+    background-color: var(--ultramarine-blue);
+    color: white;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tag-list li:hover {
+    background-color: var(--green);
+}
+/* Set a minimum height for the search container */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-height: 50px; /* Adjust minimum height as needed */
+    margin-top: 20px;
+}
+
+#search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#search-btn {
+    background-color: #063;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#search-btn:hover {
+    background-color: var(--ultramarine-blue);
+}
+
+/* Style for suggestion box */
+#suggestions {
+    position: absolute;
+    top: calc(100% + 10px); /* Adjust distance from search box */
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    max-height: 200px; /* Limit max height for scrolling */
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.suggestion-item:hover {
+    background-color: #f2f2f2;
+}
+
+.suggestion-item:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.suggestion-item:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* Make search results scrollable */
+#search-results {
+    max-height: 500px; /* Adjust max height as needed */
+    overflow-y: auto;
+    
+}
+
+#suggestions {
+    display: none;
+}
+.section-subtitle{
+    padding-top: 120px;
+}

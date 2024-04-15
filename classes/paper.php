@@ -254,7 +254,17 @@ class Paper
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
+    public function getMorePapers($offset, $limit) {
+        // Perform database query to fetch more papers using $offset and $limit
+        $query = 'SELECT * FROM papers LIMIT :offset, :limit';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     // Get papers uploaded by a specific user
     public function getPapersByUser($email)
     {
@@ -332,17 +342,6 @@ class Paper
         return $papers;
     }
     
-    // Search papers by tag
-    public function searchPapersByTag($tag)
-    {
-        $query = 'SELECT * FROM ' . $this->table . ' WHERE tags LIKE :tag';
-        $stmt = $this->conn->prepare($query);
-        $tag = '%' . $tag . '%'; // Add wildcards for partial matching
-        $stmt->bindParam(':tag', $tag);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     // Get popular papers by views
     public function getPopularPapersByViews($limit = 100)
     {

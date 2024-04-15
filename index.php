@@ -40,13 +40,20 @@
           <div class="hero-content">
             <p class="section-subtitle">Enhancing Learning Experience</p>
             <h2 class="h1 hero-title">Academic Excellence Unveiled</h2>
-            <p class="hero-text">
-              Elevate your exam preparation with access to a treasure trove of past exam papers from Aligarh Muslim University. Unleash the power of knowledge and preparation.
-            </p>
-            <a href="http://localhost/amupapers/pages/register.php" class="btn btn-primary">
-              <span class="span">Register Now</span>
-              <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-            </a>
+            <p class="hero-text" style="text-align: justify;">
+  Elevate your exam preparation with access to a treasure trove of past exam papers from Aligarh Muslim University. Unleash the power of knowledge and preparation.
+  <?php
+  if (!isset($_SESSION['username'])) {
+    echo "<br>
+    Begin your enriched AMU journey! Register for exclusive benefits: bookmarking, search, urgent requests, contribute. Join our community now
+    <a href='http://localhost/amupapers/pages/register.php' class='btn btn-primary'>
+      <span class='span'>Register Now</span>
+      <ion-icon name='arrow-forward-outline' aria-hidden='true'></ion-icon>
+    </a>";
+  }
+  ?>
+</p>
+
           </div>
         </div>
       </section>

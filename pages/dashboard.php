@@ -63,6 +63,11 @@ $_SESSION['code']=$userDetails['code'];
               :root{
             --section-padding: 50px !important;
         }
+        .button-container {
+    display: flex;
+    gap: 10px; /* Adjust as needed */
+}
+
     </style>
 </head>
 
@@ -170,6 +175,7 @@ if (!empty($papers)){
 
 ?>
           <div class="hero-content">
+          <div class="button-container">
           <a href="user_papers_table.php" class="btn btn-primary" style="min-height: 0; padding: 7px 12px;gap: 0px;font-weight:var(--fw-500); margin-top:20px !important;">
             <span class="span">Your Uploads</span>
             <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
@@ -177,8 +183,13 @@ if (!empty($papers)){
 <?php
 }
 ?>
-          </div>
 
+<a href="bookmarked.php" class="btn btn-primary" style="min-height: 0; padding: 7px 12px;gap: 0px;font-weight:var(--fw-500); margin-top:20px !important;">
+            <span class="span">Bookmarked</span>
+            <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+          </a>
+
+          </div>
         </div>
       </section>
   <script src="../js/script.js" defer></script>

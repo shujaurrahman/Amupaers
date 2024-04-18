@@ -37,9 +37,6 @@ $stmt->execute();
     ul{
       padding-top: 20px;
     }
-    p{
-      padding-top: 100px;
-    }
   </style>
 </head>
 
@@ -81,7 +78,7 @@ $stmt->execute();
           <?php
         }
       } else {
-        echo "<p>No Querries found.</p>";
+        echo "<p style='padding-top:100px;margin-left:50px'><bold>No Querries found.</bold></p>";
       }
       ?>
     </div>

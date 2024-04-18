@@ -1,16 +1,28 @@
 const form = document.querySelector(".login form");
-submitBtn = form.querySelector(".submitButton");
-errorText = form.querySelector(".error-text");
+const submitBtn = form.querySelector(".submitButton");
+const errorText = form.querySelector(".error-text");
 
 form.onsubmit = (e) => {
   e.preventDefault();
 }
 
 submitBtn.onclick = () => {
+  // Get form input values
+  const name = form.querySelector('[name="name"]').value.trim();
+  const email = form.querySelector('[name="email"]').value.trim();
+  const subject = form.querySelector('[name="subject"]').value.trim();
+  const message = form.querySelector('[name="message"]').value.trim();
 
+  // Validate form inputs
+  if (name === "" || email === "" || subject === "" || message === "") {
+    alert("Please fill in all required fields.");
+    return; // Stop further execution
+  }
+
+  // Form data is valid, proceed with form submission
   submitBtn.disabled = true;
-
   submitBtn.value = "Processing...";
+
   let xhr = new XMLHttpRequest();
   xhr.open("POST", "../backend/contact.php", true);
   xhr.onload = () => {
@@ -18,14 +30,12 @@ submitBtn.onclick = () => {
       if (xhr.status === 200) {
         let data = xhr.response;
         if (data === "success") {
+          // Optionally handle success response
         } else {
           errorText.style.display = "block";
           errorText.textContent = data;
-          // Re-enable the submit button
           submitBtn.disabled = false;
-          // Change the button text back to "Register Now"
           submitBtn.value = "Submit";
-          // Hide the error message after 2  seconds
           setTimeout(() => {
             errorText.style.display = "none";
             location.href = "../index.php";
@@ -36,4 +46,4 @@ submitBtn.onclick = () => {
   };
   let formData = new FormData(form);
   xhr.send(formData);
-}
+};

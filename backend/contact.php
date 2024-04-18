@@ -11,7 +11,7 @@ $conn = $database->getConnection();
 
 // Check if all necessary data is provided
 if (isset($_POST['name'], $_POST['email'],$_POST['subject'], $_POST['message'])) {
-
+    // var_dump($_POST);
     // Get the data from POST
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -34,15 +34,12 @@ if (isset($_POST['name'], $_POST['email'],$_POST['subject'], $_POST['message']))
     $stmt->bindParam(':message', $message);
     $stmt->bindParam(':date', $date);
 
-    // Execute the statement
-    if ($stmt->execute()) {
-        if ($_SESSION['msg'] = 'contact-msg'){
-        // echo $_SESSION['msg'];
-        echo "Message Submitted Succesfully.";
+        // Execute the statement
+        if ($stmt->execute()) {
+            $_SESSION['msg'] = "Message Submitted Successfully.";
+            echo "Message Submitted Successfully.";
+        } else {
+            echo "Failed to submit testimonial.";
         }
-    } else {
-        echo "Failed to submit testimonial.";
-    }
-
 } 
 ?>

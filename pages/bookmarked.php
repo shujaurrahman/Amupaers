@@ -92,63 +92,16 @@ $conn = $database->getConnection();
 // Initialize User object
 $paper = new Paper($conn);
 
-// Fetch all users
-$papers = $paper->getPapersByUser($email);
-if (!empty($papers)){
 ?>
+
 
     <div class="container">
         <div class="container-fluid p-0">
-            <h1 class="h3 mb-3" style="padding:20px 30px">Paper Bookmarked by you </h1>
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <table class="table table-striped" style="width:100%">
-                                <thead>
-                                <tr>
-                                    <th>Category</th>
-                                    <th>Department</th>
-                                    <th>Course</th>
-                                    <th>Year</th>
-                                    <th>View</th>
-                                    <th>Status</th>
-                                    <th>Date</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                // Loop through each paper and display its details
-                                foreach ($papers as $paper) {
-                                    $uploadDate = date('d F Y', strtotime($paper['upload_date']));
-                                    $msgStatus="";
-                                    if ($paper['status']=="rejected"){
-                                        $msgStatus="<p style='font-size:13px'> {$paper['course']} {$paper['year']} of {$paper['department']} Department  upload {$paper['status']} reason: ".$paper['subject']."</p>";
-                                    }
-                                    echo "<tr>";
-                                    echo "<td>{$paper['category']}</td>";
-                                    echo "<td>{$paper['department']}</td>";
-                                    echo "<td>{$paper['course']}</td>";
-                                    echo "<td>{$paper['year']}</td>";
-                                    echo "<td><span class='ion-icon-container'><a href='{$paper['file_path']}' target='_blank'><ion-icon name='eye' size='large'></ion-icon></a></span></td>";
-                                    echo "<td>{$paper['status']}</td>";
-                                    echo "<td>{$uploadDate}</td>";
-                                    echo $msgStatus;
-                                    echo "</tr>";
-                                }
-                                ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h1 class="h3 mb-3" style="padding:20px 30px">Comming Soon! </h1>
         </div>
     </div>
     <?php
-}else{
-    echo "<div class='container'><div class='container-fluid p-0'><h3 style='padding-top:50px'>No paper yet uploaded by you.</h3></div></div>";
-}
+
 ?>
 </body>
 </html>
